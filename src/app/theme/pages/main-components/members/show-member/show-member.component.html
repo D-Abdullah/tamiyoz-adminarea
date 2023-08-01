@@ -1,0 +1,712 @@
+<ng-container *ngIf="isDataAvailable === true; then ok else load"></ng-container>
+<ng-template #ok>
+
+	<!-- BEGIN: Subheader -->
+	<div class="m-subheader" appunwraptag="">
+		<div class="d-flex align-items-center">
+			<div class="mr-auto">
+				<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+					<li class="m-nav__item m-nav__item--home">
+						<a routerLink="/" class="m-nav__link m-nav__link--icon">
+							<i class="m-nav__link-icon la la-home"></i>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+					<li class="m-nav__item">
+						<a routerLink="/members/all-members" class="m-nav__link">
+							<span class="m-nav__link-text">
+								كافة الأعضاء
+							</span>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+					<li class="m-nav__item">
+						<a href="" class="m-nav__link">
+
+							<span class="m-nav__link-text">
+								عرض تفاصيل بيانات العضو
+							</span>
+
+						</a>
+					</li>
+				</ul>
+			</div>
+
+
+		</div>
+	</div>
+	<!-- END: Subheader -->
+
+	<div class="m-content">
+
+		<div *ngIf="members_details_view && page_id !== null">
+
+			<div class="row">
+
+				<div class="col-xl-3 col-lg-4">
+					<div class="m-portlet m-portlet--full-height">
+						<div class="m-portlet__body">
+							<div class="m-card-profile">
+								<div class="m-card-profile__title m--hide">
+									Your Profile
+								</div>
+								<div class="m-card-profile__pic">
+									<div class="m-card-profile__pic-wrapper">
+										<img *ngIf="successImg" [src]="img" style="height: 130px;" alt="صورة العضو">
+									</div>
+								</div>
+								<div class="m-card-profile__details">
+									<span class="m-card-profile__name">
+										{{ full_name }}
+									</span>
+									<!-- <a href="" class="m-card-profile__email m-link">
+										{{ email }}
+									</a> -->
+								</div>
+							</div>
+							
+
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xl-9">
+
+					<div class="m-portlet m-portlet--full-height">
+						<div class="m-portlet__body">
+
+							<table class="table table-hover" style="width: 100%">
+
+								<tr>
+									<th class="text-center">رقم الهاتف</th>
+									<td class="text-center">{{ mobile }}</td>
+								</tr>
+								<tr *ngIf="email !=''">
+									<th class="text-center">البريد الالكتروني</th>
+									<td class="text-center">{{ email }}</td>
+								</tr>
+								
+								<tr>
+									<th class="text-center">نوع العضوية</th>
+									<th class="text-center" ><span class="m-badge m-badge--primary" *ngIf="user_type === 'student'" style="width: 100px; padding: 4px">طالب
+									</span>
+										<span class="m-badge m-badge--success" style="width: 100px; padding: 4px" *ngIf="user_type === 'parent'">ولي امر</span>
+										<span class="m-badge m-badge--success" style="width: 100px; padding: 4px" *ngIf="user_type === 'teacher'">مدرس</span>
+									</th>
+								</tr>
+								
+								
+								<tr>
+									<th class="text-center">تاريخ الإضافة</th>
+									<td class="text-center">{{ date_added | date:'medium'}}</td>
+								</tr>
+								<tr *ngIf="userLocation !=null ">
+									<th class="text-center">الموقع</th>
+									<td class="text-center">
+										<div class="m-link" style="cursor: pointer;" 
+										 (click)="onNavigate(userLocation['lat'] + ',' + userLocation['lon'], 'map')" title="الموقع على الخريطة">إضغط هنا</div>
+									<div>اخر ظهور {{userLocation['date_updated'] | date:'medium'}}</div>
+									</td>
+								</tr>
+
+							</table>
+
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="row" >
+
+				<div class="col-xl-12">
+
+					<div class="m-portlet__body">
+
+						<div class="m-section">
+
+							<div class="m-portlet">
+
+								<div class="m-portlet__head">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<span class="m-portlet__head-icon m--hide">
+												<i class="la la-gear"></i>
+											</span>
+											<h3 class="m-portlet__head-text">الطلبات</h3>
+										</div>
+									</div>
+								</div>
+
+								<div *ngIf="userOrders?.length > 0">
+									<table class="table table-bordered table-hover" style="width: 100%">
+
+										<thead>
+											<tr class="text-center">
+												
+												<th>رقم الطلب</th>
+												<th>نوع الطلب</th>
+												<th>الحالة</th>
+												<th>الكمية فى الزيارة</th>
+												<th>الكمية الكلية</th>
+												<th>التكلفة الكلية</th>
+												<th>تاريخ التوصيل</th>
+												<th>عرض</th>
+												
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr class="text-center" *ngFor="let order of userOrders; let i = index;">
+												
+												<td>
+													<a routerLink="/orders/show-order/{{order.id}}" 
+															title="عرض التفاصيل" style="padding-top: 5px!important;">
+															{{ order.id }}
+															</a>
+												</td>
+												
+												<td>
+													<span class="m-badge m-badge--danger" style="width: 100px; padding: 4px" *ngIf="order.order_type === 'once'">مرة واحدة</span>
+															<span class="m-badge m-badge--info" style="width: 100px; padding: 4px" *ngIf="order.order_type === 'participation'">
+															إشتراك
+															</span>		
+												</td>
+
+												<td>
+													<span class="m-badge m-badge--danger" style="width: 100px; padding: 4px" *ngIf="order.status === 'canceled'">تم الالغاء</span>
+															<span class="m-badge m-badge--info" style="width: 100px; padding: 4px" *ngIf="order.status === 'pending'">
+															قيد الانتظار
+															</span>
+															
+															<span class="m-badge m-badge--info" style="width: 100px; padding: 4px" *ngIf="order.status === 'accepted'">
+																تمت الموافقة 
+															</span>
+															<span class="m-badge m-badge--info" style="width: 100px; padding: 4px" *ngIf="order.status === 'assigned'">
+															تم الاسناد الى مندوب
+															</span>
+															
+																<span class="m-badge m-badge--success" style="width: 100px; padding: 4px" *ngIf="order.status === 'completed'">
+																إكتمل
+																		</span>
+																
+												</td>
+												<td>{{ order.quantity}}  
+													<span *ngIf="order.quantity_type == '1'">m3</span>
+													<span *ngIf="order.quantity_type == '2'">طن</span>
+												</td>
+												<td>{{ order.total_quantity}}
+													<span *ngIf="order.quantity_type == '1'">m3</span>
+													<span *ngIf="order.quantity_type == '2'">طن</span>
+												</td>
+												<td>{{ order.total_cost}}     ريال سعودي  </td>  
+												<td>{{ order.date_added | date:'medium' }}</td>
+												<td>
+												<a routerLink="/orders/show-order/{{order.id}}" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+															title="عرض التفاصيل">
+																<i class="la la-eye"></i>
+												</a>
+												</td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+								<div *ngIf="!userOrders?.length > 0" style="text-align: center;padding: 10px;">
+									
+									<h6> لا توجد طلبات</h6>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<div class="row" *ngIf="user_type === 'provider'">
+
+				<div class="col-xl-12">
+
+					<div class="m-portlet__body">
+
+						<div class="m-section">
+
+							<div class="m-portlet">
+
+								<div class="m-portlet__head">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<span class="m-portlet__head-icon m--hide">
+												<i class="la la-gear"></i>
+											</span>
+											<h3 class="m-portlet__head-text col-md-6"># العمليات المالية #</h3>
+											<div class="m-portlet__head-text col-md-6" style="text-align: left">
+													<a href="#" (click)="goToBobup('',financialoperation)" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air" > إضافة عملية &nbsp;  <i class="la flaticon-plus"></i></a>
+													
+											</div>
+
+																
+										</div>
+									</div>
+								</div>
+
+								<div *ngIf="financialOperations?.length > 0">
+									<table class="table table-bordered table-hover" style="width: 100%">
+
+										<thead>
+											<tr class="text-center">
+												
+												<th>رقم العملية</th>
+												<th>رقم الطلب</th>
+												<th>القيمة</th>
+												<th>تفاصيل</th>
+												<th>تاريخ الاضافة</th>
+												
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr class="text-center" *ngFor="let operation of financialOperations; let i = index;">
+												
+												<td>{{ operation.id }}</td>
+												
+												
+												<td>
+													<span>
+														<a *ngIf="operation.order_id  !='' &&  operation.order_id  != null " routerLink="/orders/show-order/{{operation.order_id}}" 
+															title="عرض التفاصيل" style="padding-top: 5px!important;">
+															{{ operation.order_id }}
+											            </a>
+													</span>
+													<span *ngIf="operation.order_id  == '' ||  operation.order_id  == null ">
+														من الإدارة
+													</span>
+												
+												</td>
+												<td>{{ operation.value }}   ريال سعودي </td>
+												<td>{{ operation.message }}</td>
+												<td class="text-center">{{ operation.date_added | date:'medium'}}</td>
+											</tr>
+										</tbody>
+
+									</table>
+								</div>
+								<div *ngIf="!financialOperations?.length > 0" style="text-align: center;padding: 10px;">
+									
+									<h6> لا توجد عمليات</h6>
+
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="row"  *ngIf="user_type === 'provider'">
+
+				<div class="col-xl-12">
+
+					<div class="m-portlet__body">
+
+						<div class="m-section">
+
+							<div class="m-portlet">
+
+								<div class="m-portlet__head">
+									<div class="m-portlet__head-caption">
+										<div class="m-portlet__head-title">
+											<span class="m-portlet__head-icon m--hide">
+												<i class="la la-gear"></i>
+											</span>
+
+											<h3 class="m-portlet__head-text col-md-6"># المندوبين التابعين لي #</h3>
+											<div class="m-portlet__head-text col-md-4" style="text-align: left">
+												<a href="#" (click)="goToBobup('',addrepresentative)" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air" > إضافة مندوب &nbsp;  <i class="la flaticon-plus"></i></a>
+												
+										    </div>
+										</div>
+									</div>
+								</div>
+
+								<div *ngIf="userRepresentatives?.length > 0">
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												
+												<th class="text-center"><i class="m-menu__link-icon la la-image"></i></th>
+												
+
+												<th>
+													الاسم الكامل
+												</th>
+
+												
+												<th>رقم الهاتف</th>
+												<th>نوع العضوية</th>
+												<th>الحالة</th>
+												<th >المدينة</th>
+												<th >الحي</th>
+												
+												<th>تاريخ الإضافة</th>
+
+												<th style="width: 60px">عرض</th>
+											
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr *ngFor="let member of userRepresentatives; let i = index;">
+
+											
+												<td class="text-center">
+													
+													<img *ngIf="member.img != '' && member.img != null && member.img != undefined" class="rounded-circle" width="40" height="40" [src]="userImgPath + member.img" alt="صورة العضو">
+													<img *ngIf="member.img == '' || member.img == null || member.img == undefined" class="rounded-circle" width="40" height="40" [src]="defaultImg" alt="صورة العضو">
+												
+											</td>
+												<td>
+													<span *ngIf="member.full_name === null">---</span>
+													<span *ngIf="member.full_name !== null">{{ member.full_name }}</span>
+												</td>
+
+												
+
+												<td>
+													<span *ngIf="member.mobile === null">---</span>
+													<span *ngIf="member.mobile !== null">{{ member.mobile }}</span>
+												</td>
+
+												<td>
+													<span class="m-badge m-badge--primary" *ngIf="member.user_type === 'client'" style="width: 100px; padding: 4px">عميل
+														</span>
+													<span class="m-badge m-badge--primary" *ngIf="member.user_type === 'provider'" style="width: 100px; padding: 4px">مزود خدمة
+														</span>
+													<span class="m-badge m-badge--success" style="width: 100px; padding: 4px" *ngIf="member.user_type === 'representative'">مندوب</span>
+												</td>
+												<td>
+													<span class="m-badge m-badge--danger" *ngIf="member.status === '0'" style="width: 100px; padding: 4px">غير
+														مفعل</span>
+													<span class="m-badge m-badge--success" style="width: 100px; padding: 4px" *ngIf="member.status === '1'">مفعل</span>
+												</td>
+
+												<td >{{ member.city_name  }}</td>
+
+												<td>{{ member.district_name  }}</td>
+									
+												<td>{{ member.date_added | date:'medium' }}</td>
+
+												<td>
+													<a routerLink="/members/show-member/{{member.id}}" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+													 title="عرض بيانات العضو">
+														<i class="la la-eye"></i>
+													</a>
+
+												</td>
+
+												
+
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div *ngIf="!userRepresentatives?.length > 0" style="text-align: center;padding: 10px;">
+									
+									<h6> لا يوجد مندوبين</h6>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+
+		<div *ngIf="members_details_view === false && page_id !== null" class="m-portlet">
+			<div class="m-portlet__body">
+				<div class="m-form__section m-form__section--first">
+
+					<div class="m-alert m-alert--icon alert alert-danger" role="alert">
+						<div class="m-alert__icon">
+							<i class="flaticon-danger"></i>
+						</div>
+						<div class="m-alert__text">
+							<strong>
+								{{ commService.permissionMsgType }}
+							</strong>
+							{{ commService.permissionMsg }}
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</ng-template>
+
+<ng-template #load>
+	<div class="center-content">
+		<img [src]="loadingImgPath" alt="Loading..." class="loading-img">
+	</div>
+</ng-template>
+
+
+<ng-template  #content  let-d="dismiss">
+
+	<div class="modal-body" id="membermodalbody">
+			<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+		<img class="img-fluid"  [src]="bobupImgPath" alt="">
+	</div>
+	
+</ng-template>
+
+
+<ng-template  #financialoperation  let-d="dismiss">
+
+	<div class="modal-body" id="membermodalbody">
+		<div class="modal-header">
+		    <h5 class="modal-title">إضافة عملية مالية</h5>
+			<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+					<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+
+				<div class="col-md-12">
+					<br>
+					<label > القيمة </label>
+					<input type="number" min="0" step="3" [(ngModel)]="financialoperationvalue"  class="form-control m-input"
+					 placeholder="القيمة" autocomplete="off">
+					 <br>
+					 <label *ngIf="financialoperationvaluecorrect" style="color: red;"> الرجاء ادخال قيمة صحيحة </label>
+					 <br>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" (click)="addFinancialOperation()">حفظ البيانات</button>
+					<button type="button" class="btn btn-secondary" aria-label="Close" (click)="d('Cross click')" >إلغاء</button>
+				</div>
+	</div>
+	
+</ng-template>
+
+<ng-template  #addrepresentative  let-d="dismiss">
+
+	<div class="modal-body" id="membermodalbody">
+		<div class="modal-header">
+		    <h5 class="modal-title">إضافة مندوب توصيل</h5>
+			<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+					<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+
+				<div class="col-md-12">
+					
+
+					<div class="row">
+
+						<div class="col-md-6">
+
+							<div class="form-group m-form__group">
+								<label for="provider_full_name">
+									الاسم الكامل :
+								</label>
+								<input id="provider_full_name" name="provider_full_name" [(ngModel)]="provider_full_name" type="text" class="form-control m-input"
+								 placeholder="الاسم الكامل" autocomplete="off" required (keyup)="onKeyUpfull_name($event)">
+
+								<ng-container *ngIf="successfull_name">
+									<span class="m-form__help" style="color: red">
+										{{ full_nameErrorMsg }}
+									</span>
+								</ng-container>
+
+							</div>
+						</div>
+
+						<div class="col-md-6">
+
+							<div class="form-group m-form__group">
+								<label for="provider_mobile">
+									رقم الهاتف :
+								</label>
+								<input id="provider_mobile" name="provider_mobile" [(ngModel)]="provider_mobile" type="text" class="form-control m-input" placeholder="رقم الهاتف"
+								 autocomplete="off" (keyup)="onKeyUpMobile($event)" (blur)="onBlurMobile($event)">
+
+								 <ng-container *ngIf="successMobile">
+									<span class="m-form__help" style="color: red">
+										{{ mobileErrorMsg }}
+									</span>
+								</ng-container>
+								<ng-container *ngIf="errorMobileErrorExsistMsg && add_action===true">
+									<span class="m-form__help" style="color: red">
+										{{ mobileErrorExsistMsg }}
+									</span>
+								</ng-container>
+							</div>
+
+						</div>
+
+					</div>
+
+
+
+					<div class="row">
+
+						<div class="col-md-6">
+							<div class="form-group m-form__group">
+								<label for="password">
+									كلمة المرور :
+								</label>
+								<input id="password" name="password" [(ngModel)]="password" type="password" class="form-control m-input"
+								 placeholder="كلمة المرور" autocomplete="off" required (keyup)="onKeyUpPassword($event)">
+
+								<ng-container *ngIf="successPassword">
+									<span class="m-form__help" style="color: red">
+										{{ passwordErrorMsg }}
+									</span>
+								</ng-container>
+
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group m-form__group">
+								<label for="confirm_password">
+									تأكيد كلمة المرور :
+								</label>
+								<input id="confirm_password" name="confirm_password" [(ngModel)]="confirm_password" type="password" class="form-control m-input"
+								 placeholder="تأكيد كلمة المرور" autocomplete="off" required (keyup)="onKeyUpConfirmPassword($event)">
+
+								<ng-container *ngIf="successConfirmPassword">
+									<span class="m-form__help" style="color: red">
+										{{ confirmPasswordErrorMsg }}
+									</span>
+								</ng-container>
+
+							</div>
+						</div>
+
+					</div>
+
+					<div *ngIf="misMatchConfirm" class="row">
+						<br>
+						<div class="col-md-12 text-center">
+							<span class="m-form__help" style="color: red">
+								{{ misMatchConfirmErrorMsg }}
+							</span>
+						</div>
+
+					</div>
+					<br>
+				
+
+
+
+					<div class="row">
+
+						<div class="col-md-3">
+
+							<div class="form-group m-form__group">
+								<label>
+									المدينة
+								</label>
+								
+								<select class="form-control m-input" id="city_id" [(ngModel)]="city_id"  (change)="getDistrictsByCityId()">
+
+									<option  value="" selected="selected">---  إختر المدينة ---</option>
+									<option *ngFor="let city of cities; let inx = index" value="{{city.id}}">
+										{{city.pla_name}}
+									</option>
+
+								</select>
+							
+							
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group m-form__group">
+								<label for="district_id">
+									الحي
+								</label>
+
+								<select class="form-control m-input" id="district_id" [(ngModel)]="district_id"  >
+
+									<option  value="" selected="selected">---  إختر الحي ---</option>
+									<option *ngFor="let district of districts; let inx = index" value="{{district.id}}">
+										{{district.pla_name}}
+									</option>
+
+								</select>
+							</div>
+
+						</div>
+						<div class="col-md-3">
+
+							<div class="form-group m-form__group">
+								<label>
+
+									خط العرض
+
+								</label>
+								<input type="text" class="form-control m-input" [(ngModel)]="lat" placeholder="خط العرض" />
+
+							</div>
+
+						</div>
+						<div class="col-md-3">
+
+							<div class="form-group m-form__group">
+								<label>
+									خط الطول
+
+								</label>
+								<input type="text" class="form-control m-input" [(ngModel)]="lon" placeholder="خط الطول" />
+
+							</div>
+
+						</div>
+
+					</div>
+					<div class="form-group m-form__group col-md-12" *ngIf="errorPlaceAddress">
+						<ng-container *ngIf="errorPlaceAddress">
+							<div style="margin-top: 10px;">
+								<span class="m-form__help" style="color: red">
+									{{ adderssplacemsgerror }}
+								</span>
+							</div>
+						</ng-container>
+					</div>
+
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" (click)="addEditUser()">حفظ البيانات</button>
+					<button type="button" class="btn btn-secondary" aria-label="Close" (click)="d('Cross click')" >إلغاء</button>
+				</div>
+	</div>
+	
+</ng-template>
+

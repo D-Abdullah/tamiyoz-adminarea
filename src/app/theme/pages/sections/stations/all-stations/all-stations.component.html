@@ -1,0 +1,623 @@
+<ng-container
+  *ngIf="isDataAvailable === true; then ok; else load"
+></ng-container>
+
+<ng-template #ok>
+  <!-- BEGIN: Subheader -->
+  <div class="m-subheader" appunwraptag="">
+    <div class="d-flex align-items-center">
+      <div class="mr-auto">
+        <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+          <li class="m-nav__item m-nav__item--home">
+            <a routerLink="/" class="m-nav__link m-nav__link--icon">
+              <i class="m-nav__link-icon la la-home"></i>
+            </a>
+          </li>
+          <li class="m-nav__separator">-</li>
+
+          <li class="m-nav__item">
+            <a routerLink="/stations/all-stations" class="m-nav__link">
+              <span class="m-nav__link-text"> كافة المشاريع </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-xl-3 m--align-right order-1 order-xl-2">
+        <a
+          href="javascript:void(0)"
+          (click)="goToAddservice()"
+          class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air"
+        >
+          <span>
+            <span> إضافة مشروع جديد </span> &nbsp;
+            <i class="la flaticon-plus"></i>
+          </span>
+        </a>
+        <div class="m-separator m-separator--dashed d-xl-none"></div>
+      </div>
+    </div>
+  </div>
+  <!-- END: Subheader -->
+
+  <div class="m-content">
+    <div class="row">
+      <div class="col-xl-12">
+        <!--begin::Portlet-->
+        <div *ngIf="stations_view" class="m-portlet m-portlet--tab">
+          <div class="m-portlet__body">
+            <!--begin::Section-->
+            <div class="m-section">
+              <div class="m-section__content">
+                <div class="row" [formGroup]="serviceForm">
+                  <div class="col-md-8">
+                    <input
+                      id="searchName"
+                      type="text"
+                      [(ngModel)]="searchName"
+                      formControlName="searchName"
+                      class="form-control m-input"
+                      placeholder="ابحث ب اسم المشروع ..."
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <select
+                      id="searchCountry"
+                      formControlName="shopStatus"
+                      [(ngModel)]="shopStatus"
+                      class="form-control m-input"
+                      aria-describedby="option-error"
+                      aria-invalid="false"
+                      required
+                    >
+                      <option value="" [selected]="shopStatus == ''">
+                        حاله المحل
+                      </option>
+                      <option value="1">مستأجر</option>
+
+                      <option value="0">متاح</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-2">
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      (click)="goToSearch(searchName)"
+                    >
+                      بحث
+                    </button>
+                  </div>
+                </div>
+                <br />
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="col-xl-2">
+                      <h4 class="modal-title" id="myModalLabel">
+                        <button
+                          type="button"
+                          (click)="openModal(exampleModal)"
+                          class="btn btn-primary"
+                          data-toggle="modal"
+                          data-target="#exampleModal"
+                        >
+                          <i class="fa fa-download"></i> طباعه المشاريع PDF
+                        </button>
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+                <br />
+
+                <ng-container
+                  *ngIf="
+                    all_services?.length > 0;
+                    then data;
+                    else noAvailableData
+                  "
+                ></ng-container>
+
+                <ng-template #data>
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th class="text-center" style="width: 60px">
+                            <label class="m-checkbox m-checkbox--success">
+                              <input
+                                type="checkbox"
+                                class="check_all"
+                                (click)="check_all($event)"
+                              />
+                              <span></span>
+                            </label>
+                          </th>
+                          <th class="text-center">
+                            <i class="m-menu__link-icon la la-image"></i>
+                          </th>
+                          <th>
+                            <span
+                              style="cursor: pointer"
+                              (click)="getSortType('name')"
+                            >
+                              <span *ngIf="servicesStatus !== 'name'"
+                                >اسم المشروع</span
+                              >
+                              <span
+                                *ngIf="servicesStatus === 'name'"
+                                style="color: #34bfa3"
+                                >اسم المشروع</span
+                              >
+                              &nbsp;
+                              <i
+                                *ngIf="servicesStatus !== 'name'"
+                                class="fa fa-sort"
+                              ></i>
+                              <ng-container *ngIf="servicesStatus === 'name'">
+                                <i
+                                  class="la la-sort-amount-asc"
+                                  style="color: #34bfa3"
+                                  *ngIf="this.sortDirection === 'asc'"
+                                ></i>
+                                <i
+                                  class="la la-sort-amount-desc"
+                                  style="color: #34bfa3"
+                                  *ngIf="this.sortDirection === 'desc'"
+                                ></i>
+                              </ng-container>
+                            </span>
+                          </th>
+                          <th>حالة المشروع</th>
+                          <!-- <th> الباركود</th> -->
+
+                          <th>أضيف بواسطة</th>
+                          <th>تاريخ الإضافة</th>
+
+                          <th style="width: 60px">تعديل</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="
+                            let serviceInfo of all_services;
+                            let i = index
+                          "
+                          [formGroup]="serviceForm"
+                        >
+                          <td class="text-center">
+                            <label class="m-checkbox m-checkbox--success">
+                              <input
+                                class="checkbox_item"
+                                type="checkbox"
+                                name="items[]"
+                                (change)="
+                                  commService.toggleCheckbox(
+                                    $event,
+                                    serviceInfo.id
+                                  );
+                                  toggleCheckboxAddProject(
+                                    $event,
+                                    serviceInfo.id,
+                                    shopStatus
+                                  )
+                                "
+                                value="{{ serviceInfo.id }}"
+                              />
+                              <span></span>
+                            </label>
+                          </td>
+
+                          <td class="text-center">
+                            <img
+                              class="rounded-circle"
+                              width="30"
+                              height="30"
+                              [src]="catImgPath + serviceInfo.img"
+                              alt="صورة المشروع"
+                            />
+                          </td>
+                          <td>{{ serviceInfo.name }}</td>
+
+                          <!-- <td>{{ serviceInfo.sort }}</td> -->
+
+                          <td>
+                            <span
+                              *ngIf="serviceInfo.status === '1'"
+                              style="color: #34bfa3"
+                              >مفعل</span
+                            >
+                            <span
+                              *ngIf="serviceInfo.status === '0'"
+                              style="color: red"
+                              >غير مفعل</span
+                            >
+                          </td>
+
+                          <!-- <td><img [src]="transform(serviceInfo.qrcode)"  width="70%"></td> -->
+                          <!-- <td> -->
+                          <!-- <span *ngIf="!serviceInfo?.parent_id == '0'" style="color: #34bfa3;">{{serviceInfo.parent_name}}</span> -->
+                          <!-- <span *ngIf="serviceInfo?.parent_id === '0'" style="color: blueviolet;">مشروع رئيسي</span> -->
+                          <!-- </td> -->
+                          <td>{{ serviceInfo.user_full_name }}</td>
+                          <td>{{ serviceInfo.date_added }}</td>
+                          <td>
+                            <a
+                              routerLink="/stations/station/{{
+                                serviceInfo.id
+                              }}"
+                              class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                              name="تعديل"
+                            >
+                              <i class="la la-edit"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Button trigger modal -->
+                  <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button> -->
+
+                  <!-- Modal -->
+                  <div
+                    class="modal fade"
+                    id="exampleModal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <!-- <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> -->
+                        <div class="modal-body">
+                          <div class="table-responsive" id="table1">
+                            <div class="center-content" *ngIf="loaderFlage">
+                              <img
+                                [src]="loadingImgPath"
+                                alt="Loading..."
+                                class="loading-img"
+                              />
+                            </div>
+
+                            <table
+                              class="table table-bordered table-hover table_padding"
+                            >
+                              <thead>
+                                <tr *ngIf="projects.length > 0">
+                                  <th>اسم المشروع</th>
+
+                                  <th style="text-align:center;">
+                                     المحل
+                                  </th>
+
+                                  <!-- <th>حاله المحل</th> -->
+
+                                  <th>الباركود</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <!-- <div *ngIf="projects.length>0"> -->
+                                <tr
+                                  *ngFor="
+                                    let serviceInfo of projects;
+                                    let i = index
+                                  "
+
+                                >
+                                  <td>{{ serviceInfo.name }}</td>
+                                  <td>
+                                    <table>
+                                      <tr>
+                                        <th>
+                                          اسم المحل
+                                        </th>
+                                        <th>
+                                          حاله المحل
+                                        </th>
+                                      </tr>
+                                      <tr
+                                        *ngFor="let shop of serviceInfo.shops"
+                                      >
+                                        <td>
+                                          {{ shop.shopName }}
+                                        </td>
+                                          <td >
+                                          <span  *ngIf="shop.shopStutas == '1'"
+                                          style="color: #34bfa3" >  مستأجر</span>
+
+                                        <span
+                                          *ngIf="shop.shopStutas == '0'"
+                                          style="color: red"
+                                        >
+                                          متاح
+                                        </span>
+
+                                        </td>
+
+                                      </tr>
+
+
+
+
+                                    </table>
+
+                                  </td>
+
+
+                                  <!-- <td>
+                                    <table>
+                                      <tr
+                                        *ngFor="let shop of serviceInfo.shops"
+                                      >
+                                        <td
+                                          *ngIf="shop.shopStutas == '1'"
+                                          style="color: #34bfa3"
+                                        >
+                                          مستأجر
+                                        </td>
+                                        <td
+                                          *ngIf="shop.shopStutas == '0'"
+                                          style="color: red"
+                                        >
+                                          متاح
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td> -->
+
+                                  <td>
+                                    <img
+                                      [src]="transform(serviceInfo.qrcode)"
+                                      width="90%"
+                                    />
+                                  </td>
+                                </tr>
+                                <!-- </div> -->
+                                <div
+                                  *ngIf="projects.length <= 0 && !loaderFlage "
+                                  class="text-center"
+                                >
+                                  لا يوجد مشاريع للطباعه .....
+                                </div>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            الغاء
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="projects.length > 0"
+                            class="btn btn-primary"
+                            (click)="createPdf()"
+                          >
+                            طباعه
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div style="margin-top: 10px">
+                        <form
+                          class="m-form form-inline"
+                          id="deleteserviceForm"
+                          [formGroup]="deleteForm"
+                          (ngSubmit)="deleteserviceConfirm(deleteForm.value)"
+                        >
+                          <div class="form-group">
+                            <select
+                              id="deleteMultiple"
+                              formControlName="deleteMultiple"
+                              [(ngModel)]="deleteMultiple"
+                              class="form-control m-input"
+                              aria-describedby="option-error"
+                              aria-invalid="false"
+                              required
+                            >
+                              <option
+                                value=""
+                                [selected]="selectedOption === true"
+                              >
+                                اختيار مهمة
+                              </option>
+                              <option value="delete">حذف</option>
+                            </select>
+                          </div>
+                          &nbsp; &nbsp;
+                          <button
+                            type="submit"
+                            class="btn btn-success"
+                            [disabled]="!deleteForm.valid"
+                          >
+                            تنفيذ
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="count < resultObj['aItemsPerPage']"
+                      class="text-right"
+                    >
+                      <div style="margin-top: 15px">
+                        <span> إجمالى : </span>
+                        <span>( {{ count }} )</span>
+                      </div>
+                    </div>
+
+                    <ng-container *ngIf="count > resultObj['aItemsPerPage']">
+                      <div class="col-md-3 text-right">
+                        <div style="margin-top: 10px">
+                          <span>من : </span>
+                          <span>( {{ resultObj["from"] }} )</span>
+
+                          <span> الى : </span>
+                          <span>( {{ resultObj["to"] }} )</span>
+
+                          <span> إجمالى : </span>
+                          <span>( {{ resultObj["total"] }} )</span>
+                        </div>
+                      </div>
+
+                      <div class="col-md-5 text-right">
+                        <ul class="pagination modal-3">
+                          <li>
+                            <a
+                              *ngIf="resultObj['previous'] === null"
+                              class="prev disabled"
+                            >
+                              <i class="la la-caret-left"></i>
+                            </a>
+                          </li>
+
+                          <li>
+                            <a
+                              *ngIf="resultObj['previous'] !== null"
+                              class="prev"
+                              [routerLink]="['/stations/all-stations']"
+                              [queryParams]="{
+                                page: resultObj['previous'],
+                                sort: resultObj['sort'],
+                                type: resultObj['type'],
+                                searchName: resultObj['searchName'],
+                                shopStatus: resultObj['shopStatus']
+                              }"
+                            >
+                              <i class="la la-caret-left"></i>
+                            </a>
+                          </li>
+
+                          <ng-container
+                            *ngFor="
+                              let obj of resultObj['pages'];
+                              let i = index
+                            "
+                          >
+                            <li>
+                              <a
+                                *ngIf="resultObj['current_page'] == i + 1"
+                                class="active"
+                                >{{ obj }}</a
+                              >
+                            </li>
+
+                            <li>
+                              <a
+                                *ngIf="resultObj['current_page'] != i + 1"
+                                [class]="
+                                  resultObj['current_page'] == i + 1
+                                    ? 'active'
+                                    : ''
+                                "
+                                [routerLink]="['/stations/all-stations']"
+                                [queryParams]="{
+                                  page: obj,
+                                  sort: resultObj['sort'],
+                                  type: resultObj['type'],
+                                  searchName: resultObj['searchName'],
+                                  shopStatus: resultObj['shopStatus']
+                                }"
+                                >{{ obj }}</a
+                              >
+                            </li>
+                          </ng-container>
+
+                          <li>
+                            <a
+                              *ngIf="resultObj['next'] === null"
+                              class="next disabled"
+                            >
+                              <i class="la la-caret-right"></i>
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              *ngIf="resultObj['next'] !== null"
+                              class="next"
+                              [routerLink]="['/stations/all-stations']"
+                              [queryParams]="{
+                                page: resultObj['next'],
+                                sort: resultObj['sort'],
+                                type: resultObj['type'],
+                                searchName: resultObj['searchName'],
+                                shopStatus: resultObj['shopStatus']
+                              }"
+                            >
+                              <i class="la la-caret-right"></i>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-template>
+
+                <ng-template #noAvailableData>
+                  <div class="center-content" *ngIf="noData === false">
+                    <img
+                      [src]="loadingImgPath"
+                      alt="Loading..."
+                      class="loading-img"
+                    />
+                  </div>
+                  <div class="center-content" *ngIf="noData === true">
+                    <b>لا يوجد بيانات الآن ...</b>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+
+            <!--end::Section-->
+          </div>
+        </div>
+
+        <div *ngIf="stations_view === false" class="m-portlet">
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+              <div
+                class="m-alert m-alert--icon alert alert-danger"
+                role="alert"
+              >
+                <div class="m-alert__icon">
+                  <i class="flaticon-danger"></i>
+                </div>
+                <div class="m-alert__text">
+                  <strong>
+                    {{ commService.permissionMsgType }}
+                  </strong>
+                  {{ commService.permissionMsg }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--end::Portlet-->
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #load>
+  <div class="center-content">
+    <img [src]="loadingImgPath" alt="Loading..." class="loading-img" />
+  </div>
+</ng-template>

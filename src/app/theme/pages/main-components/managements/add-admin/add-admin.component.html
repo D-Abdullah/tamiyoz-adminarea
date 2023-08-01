@@ -1,0 +1,442 @@
+<ng-container *ngIf="isDataAvailable === true; then ok else load"></ng-container>
+<ng-template #ok>
+
+	<!-- BEGIN: Subheader -->
+	<div class="m-subheader" appunwraptag="">
+		<div class="d-flex align-items-center">
+			<div class="mr-auto">
+				<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+					<li class="m-nav__item m-nav__item--home">
+						<a routerLink="/" class="m-nav__link m-nav__link--icon">
+							<i class="m-nav__link-icon la la-home"></i>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+					<li class="m-nav__item">
+						<a routerLink="/management/all-admins" class="m-nav__link">
+							<span class="m-nav__link-text">
+								كافة الإدارات
+							</span>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+					<li class="m-nav__item">
+						<a href="" class="m-nav__link">
+
+							<span *ngIf="add_action" class="m-nav__link-text">
+								إضافة إدارة جديدة
+							</span>
+
+							<span *ngIf="edit_action" class="m-nav__link-text">
+								تعديل الإدارة
+							</span>
+
+						</a>
+					</li>
+				</ul>
+			</div>
+
+
+		</div>
+	</div>
+	<!-- END: Subheader -->
+
+	<div class="m-content">
+
+		<!--begin::Form-->
+		<form class="m-form" id="adminForm">
+
+			<div *ngIf="(admins_add && page_id === null) || (admins_edit && page_id !== null)" class="row">
+
+				<div class="col-xl-8">
+					<!--Begin::Main Portlet-->
+					<div class="m-portlet">
+
+						<!--begin: Form Wizard-->
+						<div class="m-wizard m-wizard--1 m-wizard--success m-wizard--step-first" id="m_wizard">
+							<!--begin: Message container -->
+							<div class="m-portlet__padding-x">
+								<!-- Here you can put a message or alert -->
+							</div>
+							<!--end: Message container -->
+
+							<div class="m-portlet__body">
+
+								<div class="m-section">
+									<h2 class="m-section__heading" *ngIf="add_action">البيانات الأساسية</h2>
+									<h2 class="m-section__heading" *ngIf="edit_action">تعديل الإدارة : {{full_name_title}}</h2>
+									<div class="m-separator m-separator--fit"></div>
+								</div>
+
+								<div class="m-form__section m-form__section--first">
+
+									<div class="row">
+
+										<div class="col-md-12">
+
+											<div class="form-group m-form__group">
+												<label for="full_name">
+													الاسم الكامل :
+												</label>
+												<input id="full_name" name="full_name" [(ngModel)]="full_name" type="text" class="form-control m-input"
+												 placeholder="الاسم الكامل" autocomplete="off" required (keyup)="onKeyUpfull_name($event)">
+
+												<ng-container *ngIf="successfull_name">
+													<span class="m-form__help" style="color: red">
+														{{ full_nameErrorMsg }}
+													</span>
+												</ng-container>
+
+											</div>
+										</div>
+
+									</div>
+
+									<br>
+
+									<div class="row">
+
+										<div class="col-md-12">
+
+											<div class="form-group m-form__group">
+												<label for="email">
+													البريد الإلكترونى :
+												</label>
+												<input id="email" name="email" [(ngModel)]="email" type="email" class="form-control m-input" placeholder="البريد الإلكترونى"
+												 autocomplete="off" required (keyup)="onKeyUpEmail($event)" (blur)="onBlurEmail($event)">
+
+												<ng-container *ngIf="successEmail">
+													<span class="m-form__help" style="color: red">
+														{{ emailErrorMsg }}
+													</span>
+												</ng-container>
+												<ng-container *ngIf="errorEmailErrorExsistMsg">
+													<span class="m-form__help" style="color: red">
+														{{ emailErrorExsistMsg }}
+													</span>
+												</ng-container>
+
+											</div>
+
+										</div>
+
+									</div>
+
+									<br>
+
+									<div class="row">
+
+										<div class="col-md-6">
+											<div class="form-group m-form__group">
+												<label for="password">
+													كلمة المرور :
+												</label>
+												<input id="password" name="password" [(ngModel)]="password" type="password" class="form-control m-input"
+												 placeholder="كلمة المرور" autocomplete="off" required (keyup)="onKeyUpPassword($event)">
+
+												<ng-container *ngIf="successPassword">
+													<span class="m-form__help" style="color: red">
+														{{ passwordErrorMsg }}
+													</span>
+												</ng-container>
+
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group m-form__group">
+												<label for="confirm_password">
+													تأكيد كلمة المرور :
+												</label>
+												<input id="confirm_password" name="confirm_password" [(ngModel)]="confirm_password" type="password" class="form-control m-input"
+												 placeholder="تأكيد كلمة المرور" autocomplete="off" required (keyup)="onKeyUpConfirmPassword($event)">
+
+												<ng-container *ngIf="successConfirmPassword">
+													<span class="m-form__help" style="color: red">
+														{{ confirmPasswordErrorMsg }}
+													</span>
+												</ng-container>
+
+											</div>
+										</div>
+
+									</div>
+
+									<div *ngIf="misMatchConfirm" class="row">
+										<br>
+										<div class="col-md-12 text-center">
+											<span class="m-form__help" style="color: red">
+												{{ misMatchConfirmErrorMsg }}
+											</span>
+										</div>
+
+									</div>
+
+									<br>
+
+									<div class="row">
+
+										<div class="col-md-12">
+
+											<div class="form-group m-form__group">
+												<label for="mobile">
+													رقم الهاتف :
+												</label>
+												<input id="mobile" name="mobile" [(ngModel)]="mobile" type="text" class="form-control m-input" placeholder="رقم الهاتف"
+												 autocomplete="off"  (keyup)="onKeyUpMobile($event)" (blur)="onBlurMobile($event)">
+
+
+												 <ng-container *ngIf="successMobile">
+													<span class="m-form__help" style="color: red">
+														{{ mobileErrorMsg }}
+													</span>
+												</ng-container>
+												<ng-container *ngIf="errorMobileErrorExsistMsg && add_action===true">
+													<span class="m-form__help" style="color: red">
+														{{ mobileErrorExsistMsg }}
+													</span>
+												</ng-container>
+
+											</div>
+
+										</div>
+
+									</div>
+
+									<br>
+
+									<div class="row">
+										<div class="col-md-12">
+
+											<div class="form-group m-form__group">
+												<label>
+													مستوى الإدارة :
+												</label>
+
+												<select class="form-control m-input m-input--air" id="user_level" [(ngModel)]="user_level" name="user_level"
+												 required>
+													<option value=''>--- اختيار مستوى الإدارة ---</option>
+													<option *ngFor="let level of userLevels" value='{{level.id}}'>{{level.level_name}}</option>
+												</select>
+
+												<ng-container *ngIf="successUserLevel">
+													<span class="m-form__help" style="color: red">
+														{{ userLevelErrorMsg }}
+													</span>
+												</ng-container>
+
+											</div>
+
+										</div>
+									</div>
+
+
+									<br>
+
+									<!-- <div class="row"> -->
+
+										<!-- <div class="col-md-3">
+
+											<div class="form-group m-form__group">
+												<label>
+													المدينة
+												</label>
+
+												<select class="form-control m-input" name="city_id" id="city_id" [(ngModel)]="city_id"  (change)="getDistrictsByCityId()">
+
+													<option  value="" selected="selected">---  إختر المدينة ---</option>
+													<option *ngFor="let city of cities; let inx = index" value="{{city.id}}">
+														{{city.pla_name}}
+													</option>
+
+												</select>
+
+
+											</div>
+										</div> -->
+										<!-- <div class="col-md-3">
+											<div class="form-group m-form__group">
+												<label for="district_id">
+													الحي
+												</label>
+
+												<select class="form-control m-input" name="district_id" id="district_id" [(ngModel)]="district_id"  >
+
+													<option  value="" selected="selected">---  إختر الحي ---</option>
+													<option *ngFor="let district of districts; let inx = index" value="{{district.id}}">
+														{{district.pla_name}}
+													</option>
+
+												</select>
+											</div>
+
+										</div> -->
+										<!-- <div class="col-md-3">
+
+											<div class="form-group m-form__group">
+												<label>
+
+													خط العرض
+
+												</label>
+												<input type="text" class="form-control m-input" [(ngModel)]="lat" name="lat" placeholder="خط العرض" />
+
+											</div>
+
+										</div> -->
+										<!-- <div class="col-md-3">
+
+											<div class="form-group m-form__group">
+												<label>
+													خط الطول
+
+												</label>
+												<input type="text" class="form-control m-input" [(ngModel)]="lon" name="lon" placeholder="خط الطول" />
+
+											</div>
+
+										</div> -->
+
+									<!-- </div> -->
+
+									<!-- <div class="form-group m-form__group col-md-12" *ngIf="errorPlaceAddress">
+										<ng-container *ngIf="errorPlaceAddress">
+											<div style="margin-top: 10px;">
+												<span class="m-form__help" style="color: red">
+													{{ adderssplacemsgerror }}
+												</span>
+											</div>
+										</ng-container>
+									</div> -->
+
+									<br>
+
+									<div class="row">
+
+										<div class="col-md-12">
+
+											<div class="form-group m-form__group">
+												<label>
+													ملاحظـــــات :
+												</label>
+
+												<textarea name="notes" [(ngModel)]="notes" class="form-control m-input" id="notes" placeholder="ملاحظـــــات"
+												 aria-describedby="description-error" rows="3" aria-invalid="false"></textarea>
+
+											</div>
+
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+						<!--end: Form Wizard-->
+					</div>
+					<!--End::Main Portlet-->
+				</div>
+				<div class="col-xl-4">
+
+					<div class="m-portlet">
+						<div class="m-portlet__body">
+							<div class="m-section">
+
+								<h2 class="m-section__heading">الصورة</h2>
+								<div class="m-separator m-separator--fit"></div>
+
+								<div class="m-section__content">
+									<div class="form-group m-form__group text-center">
+
+										<input type="file" name="file" [(ngModel)]="file" id="customFile" (change)="showPreviewImage($event)" accept="image/*"
+										 style="opacity: 0; position: absolute; cursor: pointer; z-index: 100; width: 100%; height: 250px;">
+
+										<img *ngIf="successImg" class="img-thumbnail img-responsive" style="position: relative; width: 100%; height: 250px;"
+										 [src]="localUrl" alt="صورة الإدارة">
+
+										<!-- <a *ngIf="successRemoveImg" class="btn btn-danger m-btn btn-sm m-btn m-btn--icon m-btn--pill mt-2" href="javascript:;"
+										 ng-reflect-href="javascript:;" (click)="removeImg()">
+											<span>
+												<span>
+													حذف
+												</span>
+												&nbsp;
+												<i class="fa fa-trash-o"></i>
+
+											</span>
+										</a> -->
+
+										<!-- <ng-container *ngIf="success_file">
+											<span class="m-form__help" style="color: red">
+												{{ fileErrorMsg }}
+											</span>
+										</ng-container> -->
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="m-portlet">
+						<div class="m-portlet__body">
+							<div class="m-section">
+								<h2 class="m-section__heading">حفظ البيانات</h2>
+								<div class="m-separator m-separator--fit"></div>
+							</div>
+
+							<button *ngIf="add_action" [disabled]="disablebtn" type="submit" class="btn btn-primary" (click)="addEditUser()">
+								حفظ الإدارة
+							</button>
+
+							<button *ngIf="edit_action" [disabled]="disablebtn" type="submit" class="btn btn-primary" (click)="addEditUser()">
+								تعديل الإدارة
+							</button>
+
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+			<div *ngIf="(admins_add === false && page_id === null) || (admins_edit === false && page_id !== null)" class="row">
+				<div class="m-portlet">
+					<div class="m-portlet__body">
+						<div class="m-form__section m-form__section--first">
+
+							<div class="m-alert m-alert--icon alert alert-danger" role="alert">
+								<div class="m-alert__icon">
+									<i class="flaticon-danger"></i>
+								</div>
+								<div class="m-alert__text">
+									<strong>
+										{{ commService.permissionMsgType }}
+									</strong>
+									{{ commService.permissionMsg }}
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+		<!--end::Form-->
+
+	</div>
+
+</ng-template>
+
+<ng-template #load>
+	<div class="center-content">
+		<img [src]="loadingImgPath" alt="Loading..." class="loading-img">
+	</div>
+</ng-template>

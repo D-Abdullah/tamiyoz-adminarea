@@ -1,0 +1,347 @@
+<ng-container *ngIf="isDataAvailable === true; then ok else load"></ng-container>
+<ng-template #ok>
+
+	<!-- BEGIN: Subheader -->
+	<div class="m-subheader" appunwrapplace="">
+		<div class="d-flex align-items-center">
+			<div class="mr-auto">
+				<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+					<li class="m-nav__item m-nav__item--home">
+						<a routerLink="/" class="m-nav__link m-nav__link--icon">
+							<i class="m-nav__link-icon la la-home"></i>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+
+					<li class="m-nav__item">
+						<a routerLink="/settings" class="m-nav__link">
+							<span class="m-nav__link-text">
+								إعدادات الموقع
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+	<!-- END: Subheader -->
+
+	<div class="m-content">
+		<div class="row">
+			<div class="col-xl-12">
+				<!--begin::Portlet-->
+
+				<div *ngIf="settings_view" class="m-portlet m-portlet--tab">
+					<div class="m-portlet__head">
+						<div class="m-portlet__head-caption">
+
+							<div class="m-portlet__head-name">
+								<span class="m-portlet__head-icon m--hide">
+									<i class="la la-gear"></i>
+								</span>
+								<h4 class="m-portlet__head-text">
+									كافة الإعدادات
+								</h4>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="m-portlet__body">
+						<!--begin::Section-->
+						<div class="m-section">
+							<div class="m-section__content">
+
+								<!--begin::Form-->
+								<form class="m-form" id="editSettingsForm" [formGroup]="editSettingsForm" (ngSubmit)="editSiteSettings(editSettingsForm.value)">
+
+									<div class="row">
+
+										<div class="col-md-12">
+
+											<div class="m-form__section m-form__section--first">
+
+												<div class="form-group m-form__group">
+
+													<label>
+														اسم الموقع :
+													</label>
+
+													<input id="site_name" formControlName="site_name" [(ngModel)]="site_name" type="text" class="form-control m-input"
+													 placeholder="يرجى إدخال اسم الموقع" autocomplete="off" required>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['site_name'].valid && editSettingsForm.controls['site_name'].touched">
+															{{ siteNameErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+
+												<div class="form-group m-form__group">
+
+													<label>
+														وصف الموقع بالعربي :
+													</label>
+
+													<textarea formControlName="site_desc" [(ngModel)]="site_desc" class="form-control m-input" id="site_desc"
+													 placeholder="يرجى إدخال وصف الموقع بالعربي" aria-describedby="description-error" aria-invalid="false" required></textarea>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['site_desc'].valid && editSettingsForm.controls['site_desc'].touched">
+															{{ siteDescriptionErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+
+
+
+                        <div class="form-group m-form__group">
+
+													<label>
+														وصف الموقع بالانجليزي:
+													</label>
+
+													<textarea formControlName="site_desc_en" [(ngModel)]="site_desc_en" class="form-control m-input" id="site_desc"
+													 placeholder=" يرجي ادخال وصف الموقع بالانجليزي" aria-describedby="description-error" aria-invalid="false" required></textarea>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['site_desc_en'].valid && editSettingsForm.controls['site_desc_en'].touched">
+															{{ siteDescriptionErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+
+												<div class="form-group m-form__group">
+
+													<label>
+														الكلمات الدالة :
+													</label>
+
+													<textarea formControlName="site_keywords" [(ngModel)]="site_keywords" class="form-control m-input" id="site_keywords"
+													 placeholder="يرجى إدخال الكلمات الدالة للموقع" aria-describedby="description-error" aria-invalid="false"
+													 required></textarea>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['site_keywords'].valid && editSettingsForm.controls['site_keywords'].touched">
+															{{ siteKeywordsErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+												<div class="form-group m-form__group">
+
+													<label>
+														العنوان بالعربي :
+													</label>
+
+													<input id="address" formControlName="address" [(ngModel)]="address" type="text" class="form-control m-input"
+													 placeholder="يرجى إدخال العنوان" autocomplete="off" required>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['address'].valid && editSettingsForm.controls['address'].touched">
+															{{ addressErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+
+
+
+
+
+												<div class="form-group m-form__group">
+
+													<label>
+														العنوان بالانجليزي :
+													</label>
+
+													<input id="address" formControlName="address_en" [(ngModel)]="address_en" type="text" class="form-control m-input"
+													 placeholder="يرجى إدخال العنوان" autocomplete="off" required>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['address_en'].valid && editSettingsForm.controls['address_en'].touched">
+															{{ addressErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+
+
+
+
+
+
+
+												<div class="form-group m-form__group">
+
+													<label>
+														البريد الإلكترونى :
+													</label>
+
+													<input id="site_email" formControlName="site_email" [(ngModel)]="site_email" type="text" class="form-control m-input"
+													 placeholder="يرجى إدخال البريد الإلكترونى للموقع" autocomplete="off" required>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['site_email'].valid && editSettingsForm.controls['site_email'].touched">
+															{{ site_emailErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+
+												<div class="form-group m-form__group">
+
+													<label>
+														الواتس اب
+													</label>
+
+													<input id="phone" formControlName="phone" [(ngModel)]="phone" type="text" class="form-control m-input"
+													 placeholder="يرجى إدخال الواتس اب" autocomplete="off" required>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['phone'].valid && editSettingsForm.controls['phone'].touched">
+															{{ phoneErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+
+
+                        <div class="form-group m-form__group">
+
+													<label>
+														رقم هاتف اخر
+													</label>
+
+													<input id="phone" formControlName="other_phone" [(ngModel)]="other_phone" type="text" class="form-control m-input"
+													 placeholder="يرجى إدخال رقم هاتف اخر" autocomplete="off" required>
+
+													<ng-container *ngIf="success">
+														<span class="m-form__help" style="color: red" *ngIf="!editSettingsForm.controls['other_phone'].valid && editSettingsForm.controls['other_phone'].touched">
+															{{ phoneErrorMsg }}
+														</span>
+													</ng-container>
+
+												</div>
+
+
+
+
+
+
+												<div class="form-group m-form__group">
+													<label>فيس بوك لينك</label>
+													<input id="facebook" formControlName="facebook" [(ngModel)]="facebook" type="text"  class="form-control m-input"
+													 placeholder="يرجى إدخال لينك فيس بوك " autocomplete="off" required>
+												</div>
+
+
+												<div class="form-group m-form__group">
+													<label>تويتر لينك</label>
+													<input id="twitter" formControlName="twitter" [(ngModel)]="twitter" type="text"  class="form-control m-input"
+													 placeholder="يرجى إدخال لينك تويتر " autocomplete="off" required>
+												</div>
+												<div class="form-group m-form__group">
+													<label>انستجرام لينك</label>
+													<input id="instagram" formControlName="instagram" [(ngModel)]="instagram" type="text"  class="form-control m-input"
+													 placeholder="يرجى إدخال لينك انستجرام " autocomplete="off" required>
+												</div>
+												<div class="form-group m-form__group">
+													<label>لينكد ان لينك</label>
+													<input id="linkedin" formControlName="linkedin" [(ngModel)]="linkedin" type="text"  class="form-control m-input"
+													 placeholder="يرجى إدخال لينك لينكد ان " autocomplete="off" required>
+												</div>
+
+
+													<div class="form-group m-form__group">
+													<label>تيك توك لينك</label>
+													<input id="facebook" formControlName="tiktok" [(ngModel)]="tiktok" type="text"  class="form-control m-input"
+													 placeholder="يرجى إدخال لينك تيك توك  " autocomplete="off" required>
+												</div>
+
+                        <div class="form-group m-form__group">
+													<label>يوتيوب لينك</label>
+													<input id="facebook" formControlName="youtube" [(ngModel)]="youtube" type="text"  class="form-control m-input"
+													 placeholder="يرجى إدخال لينك يوتيوب  " autocomplete="off" required>
+												</div>
+
+
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group m-form__group">
+                              <label>خط الطول</label>
+                              <input id="facebook" formControlName="longitude" [(ngModel)]="longitude" type="text"  class="form-control m-input"
+                               placeholder="يرجى إدخال خط الطول  " autocomplete="off" required>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group m-form__group">
+                              <label>خط العرض</label>
+                              <input id="facebook" formControlName="latitude" [(ngModel)]="latitude" type="text"  class="form-control m-input"
+                               placeholder="يرجى إدخال خط العرض  " autocomplete="off" required>
+                            </div>
+                          </div>
+                        </div>
+
+
+											</div>
+
+										</div>
+
+									</div>
+
+									<br>
+
+									<button type="submit" class="btn btn-primary" [disabled]="!editSettingsForm.valid">
+										تعديل البيانات
+									</button>
+
+								</form>
+								<!--end::Form-->
+
+							</div>
+						</div>
+
+						<!--end::Section-->
+					</div>
+				</div>
+
+				<div *ngIf="settings_view === false" class="m-portlet">
+					<div class="m-portlet__body">
+						<div class="m-form__section m-form__section--first">
+
+							<div class="m-alert m-alert--icon alert alert-danger" role="alert">
+								<div class="m-alert__icon">
+									<i class="flaticon-danger"></i>
+								</div>
+								<div class="m-alert__text">
+									<strong>
+										{{ commService.permissionMsgType }}
+									</strong>
+									{{ commService.permissionMsg }}
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!--end::Portlet-->
+			</div>
+		</div>
+	</div>
+
+</ng-template>
+
+<ng-template #load>
+	<div class="center-content">
+		<img [src]="loadingImgPath" alt="Loading..." class="loading-img">
+	</div>
+</ng-template>

@@ -1,0 +1,169 @@
+<ng-container
+  *ngIf="isDataAvailable === true; then ok; else load"
+></ng-container>
+<ng-template #ok>
+  <!-- BEGIN: Subheader -->
+  <div class="m-subheader" appunwraptag="">
+    <div class="d-flex align-items-center">
+      <div class="mr-auto">
+        <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+          <li class="m-nav__item m-nav__item--home">
+            <a routerLink="/" class="m-nav__link m-nav__link--icon">
+              <i class="m-nav__link-icon la la-home"></i>
+            </a>
+          </li>
+          <li class="m-nav__separator">-</li>
+          <li class="m-nav__item">
+            <a routerLink="/rentes/all-rentes" class="m-nav__link">
+              <span class="m-nav__link-text"> كافة طلبات الحجز </span>
+            </a>
+          </li>
+          <li class="m-nav__separator">-</li>
+          <li class="m-nav__item">
+            <a href="" class="m-nav__link">
+              <span class="m-nav__link-text"> عرض تفاصيل بيانات المستأجر </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- END: Subheader -->
+
+  <div class="m-content">
+    <div *ngIf="rentes_view && page_id !== null">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="m-portlet m-portlet--full-height">
+            <div class="m-portlet__body">
+              <table class="table table-hover" style="width: 100%">
+                <!-- <tr>
+                  <th class="text-center">اسم المستأجر</th>
+                  <td class="text-center">{{ name }}</td>
+                </tr> -->
+
+                <tr>
+                  <th class="text-center">اسم النشاط</th>
+                  <td class="text-center">
+                    {{ name ? name : "لا يوجد  " }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <th class="text-center">رقم السجل التجاري</th>
+                  <td class="text-center">
+                    {{
+                      commercial_registration_no
+                        ? commercial_registration_no
+                        : " لا يوجد"
+                    }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <th class="text-center">النشاط</th>
+                  <td class="text-center">
+                    {{ activity_type ? activity_type : "غير محدد" }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <th class="text-center">مده الايجار (بالسنه)</th>
+                  <td class="text-center">{{ rante_time }}</td>
+                </tr>
+
+                <tr>
+                  <th class="text-center">رقم الهاتف</th>
+                  <td class="text-center">
+                    <a target="_blank" class="m-link" (click)="GoTophone()">{{
+                      phone
+                    }}</a>
+                  </td>
+                </tr>
+                <tr *ngIf="email != ''">
+                  <th class="text-center">البريد الالكتروني</th>
+                  <td class="text-center">
+                    <a target="_blank" class="m-link" (click)="GoToMail()">{{
+                      email
+                    }}</a>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th class="text-center">المحل</th>
+                  <td class="text-center">{{ shop_name }}</td>
+                </tr>
+
+                <tr>
+                  <th class="text-center">المشروع</th>
+                  <td class="text-center">{{ station_name }}</td>
+                </tr>
+
+                <tr>
+                  <th class="text-center">الملاحظات</th>
+                  <td class="text-center">{{ notes ? notes : "لايوجد" }}</td>
+                </tr>
+
+                <tr *ngIf="downloadFileFlage">
+                  <th class="text-center">ملف الطلب</th>
+                  <td class="text-center">
+                    <h4 class="modal-title" id="myModalLabel">
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        (click)="download(recivedfile)"
+                      >
+                        <i class="fa fa-download"></i> تحميل ملف الطلب
+                      </button>
+                    </h4>
+                  </td>
+                </tr>
+
+                <!-- <tr>
+									<th class="text-center">تاريخ الإضافة</th>
+									<td class="text-center">{{ date_added | date:'medium'}}</td>
+								</tr> -->
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="rentes_view === false && page_id !== null" class="m-portlet">
+      <div class="m-portlet__body">
+        <div class="m-form__section m-form__section--first">
+          <div class="m-alert m-alert--icon alert alert-danger" role="alert">
+            <div class="m-alert__icon">
+              <i class="flaticon-danger"></i>
+            </div>
+            <div class="m-alert__text">
+              <strong>
+                {{ commService.permissionMsgType }}
+              </strong>
+              {{ commService.permissionMsg }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #load>
+  <div class="center-content">
+    <img [src]="loadingImgPath" alt="Loading..." class="loading-img" />
+  </div>
+</ng-template>
+
+<!--
+<ng-template  #content  let-d="dismiss">
+
+	<div class="modal-body" id="membermodalbody">
+			<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+		<img class="img-fluid"  [src]="bobupImgPath" alt="">
+	</div>
+
+</ng-template> -->

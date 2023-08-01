@@ -1,0 +1,51 @@
+.pagination {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin-top: 10px;
+}
+.pagination li {
+  display: inline;
+  text-align: center;
+}
+.pagination a {
+  float: left;
+  display: block;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 12px;
+  color: #fff;
+  margin-left: -1px;
+  border: 1px solid transparent;
+  line-height: 1.5;
+}
+.pagination a.active {
+  cursor: default;
+  color: #fff;
+}
+.pagination a:active {
+  outline: none;
+  color: #fff;
+}
+
+.modal-3 a {
+  background-color: #CCCCCC;
+  color: #FFFFFF;
+  margin-left: 3px;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  -moz-border-radius: 100%;
+  -webkit-border-radius: 100%;
+  border-radius: 100%;
+}
+.modal-3 a:hover {
+  background-color: #2ca189;
+  color: #fff;
+}
+.modal-3 a.active, .modal-3 a:active {
+  background-color: #34bfa3;
+  color: #fff;
+}
+

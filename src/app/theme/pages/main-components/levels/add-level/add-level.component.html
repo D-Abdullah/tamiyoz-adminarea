@@ -1,0 +1,1987 @@
+<ng-container
+  *ngIf="isDataAvailable === true; then ok; else load"
+></ng-container>
+<ng-template #ok>
+  <!-- BEGIN: Subheader -->
+  <div class="m-subheader" appunwraptag="">
+    <div class="d-flex align-items-center">
+      <div class="mr-auto">
+        <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+          <li class="m-nav__item m-nav__item--home">
+            <a routerLink="/" class="m-nav__link m-nav__link--icon">
+              <i class="m-nav__link-icon la la-home"></i>
+            </a>
+          </li>
+          <li class="m-nav__separator">-</li>
+          <li class="m-nav__item">
+            <a routerLink="/levels/all-levels" class="m-nav__link">
+              <span class="m-nav__link-text"> كافة المستويات </span>
+            </a>
+          </li>
+          <li class="m-nav__separator">-</li>
+          <li class="m-nav__item">
+            <a href="" class="m-nav__link">
+              <span *ngIf="add_action" class="m-nav__link-text">
+                إضافة مستوى جديد
+              </span>
+
+              <span *ngIf="edit_action" class="m-nav__link-text">
+                تعديل المستوى
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- END: Subheader -->
+
+  <div class="m-content">
+    <div class="row">
+      <div class="col-xl-12">
+        <div
+          *ngIf="
+            (levels_add && page_id === null) ||
+            (levels_edit && page_id !== null)
+          "
+          class="m-portlet__body"
+        >
+          <!--begin::Section-->
+          <div class="m-section">
+            <div class="m-portlet">
+              <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <span class="m-portlet__head-icon m--hide">
+                      <i class="la la-gear"></i>
+                    </span>
+
+                    <h3 class="m-portlet__head-text" *ngIf="add_action">
+                      البيانات الأساسية
+                    </h3>
+                    <h3 class="m-portlet__head-text" *ngIf="edit_action">
+                      تعديل المستوى : {{ level_name_title }}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+
+              <!--begin::Form-->
+
+              <form class="m-form">
+                <div class="m-portlet__body">
+                  <div class="m-form__section m-form__section--first">
+                    <div class="form-group m-form__group row">
+                      <label class="col-form-label"> اسم المستوى : </label>
+                      <div class="col-lg-6">
+                        <input
+                          id="level_name"
+                          name="levelObj.level_name"
+                          [(ngModel)]="levelObj.level_name"
+                          type="text"
+                          class="form-control m-input"
+                          placeholder="اسم المستوى"
+                          autocomplete="off"
+                          required
+                        />
+                        <ng-container *ngIf="success_level_name">
+                          <span class="m-form__help" style="color: red">
+                            {{ levelNameErrorMsg }}
+                          </span>
+                        </ng-container>
+                      </div>
+                    </div>
+
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الإعدادات العامة</label>
+                        <ul>
+                          <li>
+                            <label class="col-form-label">عرض - تعديل </label>
+                            &nbsp;
+                            <span
+                              class="level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.settings_view"
+                                  [(ngModel)]="levelObj.settings_view"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- Start Main Sections -->
+
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">اللغات</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.languages_add"
+                                  [(ngModel)]="levelObj.languages_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.languages_edit"
+                                  [(ngModel)]="levelObj.languages_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_languages_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.languages_delete"
+                                  [(ngModel)]="levelObj.languages_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_languages_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.languages_view"
+                                  [(ngModel)]="levelObj.languages_view"
+                                  type="checkbox"
+                                  (change)="
+                                    changeEditAction($event, 'languages')
+                                  "
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- //السلايد -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">السلايد</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.sliders_add"
+                                  [(ngModel)]="levelObj.sliders_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.sliders_edit"
+                                  [(ngModel)]="levelObj.sliders_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_sliders_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.sliders_delete"
+                                  [(ngModel)]="levelObj.sliders_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_sliders_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.sliders_view"
+                                  [(ngModel)]="levelObj.sliders_view"
+                                  type="checkbox"
+                                  (change)="changeEditAction($event, 'sliders')"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <!-- *****************-->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label"
+                          >عناصر الصفحه الرئيسيه</label
+                        >
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.home_section_edit"
+                                  [(ngModel)]="levelObj.home_section_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_home_section_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.home_section_view"
+                                  [(ngModel)]="levelObj.home_section_view"
+                                  type="checkbox"
+                                  (change)="
+                                    changeEditAction($event, 'home_section')
+                                  "
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- الخدمات -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الخدمات</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.services_add"
+                                  [(ngModel)]="levelObj.services_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.services_edit"
+                                  [(ngModel)]="levelObj.services_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_services_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.services_delete"
+                                  [(ngModel)]="levelObj.services_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_services_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.services_view"
+                                  [(ngModel)]="levelObj.services_view"
+                                  type="checkbox"
+                                  (change)="
+                                    changeEditAction($event, 'services')
+                                  "
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <!-- //الاخبار -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الاخبار</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.projects_add"
+                                  [(ngModel)]="levelObj.projects_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.projects_edit"
+                                  [(ngModel)]="levelObj.projects_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_projects_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.projects_delete"
+                                  [(ngModel)]="levelObj.projects_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_projects_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.projects_view"
+                                  [(ngModel)]="levelObj.projects_view"
+                                  type="checkbox"
+                                  (change)="
+                                    changeEditAction($event, 'projects')
+                                  "
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- //المحطات -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">المشاريع</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.stations_add"
+                                  [(ngModel)]="levelObj.stations_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.stations_edit"
+                                  [(ngModel)]="levelObj.stations_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_stations_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.stations_delete"
+                                  [(ngModel)]="levelObj.stations_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_stations_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.stations_view"
+                                  [(ngModel)]="levelObj.stations_view"
+                                  type="checkbox"
+                                  (change)="
+                                    changeEditAction($event, 'stations')
+                                  "
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- //التسويق -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الشركات</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.companies_add"
+                                  [(ngModel)]="levelObj.companies_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.companies_edit"
+                                  [(ngModel)]="levelObj.companies_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_companies_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.companies_delete"
+                                  [(ngModel)]="levelObj.companies_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_companies_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.companies_view"
+                                  [(ngModel)]="levelObj.companies_view"
+                                  type="checkbox"
+                                  (change)="
+                                    changeEditAction($event, 'companies')
+                                  "
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- //ايميلات المراسله -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">ايميلات المراسله</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.correspondence_mails_add"
+                                  [(ngModel)]="
+                                    levelObj.correspondence_mails_add
+                                  "
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.correspondence_mails_edit"
+                                  [(ngModel)]="
+                                    levelObj.correspondence_mails_edit
+                                  "
+                                  type="checkbox"
+                                  [disabled]="disable_companies_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.correspondence_mails_delete"
+                                  [(ngModel)]="
+                                    levelObj.correspondence_mails_delete
+                                  "
+                                  type="checkbox"
+                                  [disabled]="disable_companies_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.correspondence_mails_view"
+                                  [(ngModel)]="
+                                    levelObj.correspondence_mails_view
+                                  "
+                                  type="checkbox"
+                                  (change)="
+                                    changeEditAction(
+                                      $event,
+                                      'correspondence_mails'
+                                    )
+                                  "
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- //طلبات الايجار -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">طلبات الحجز</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.rentes_view"
+                                  [(ngModel)]="levelObj.rentes_view"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.rentes_delete"
+                                  [(ngModel)]="levelObj.rentes_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_rentes_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- //المحلات -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">المحلات</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.shops_add"
+                                  [(ngModel)]="levelObj.shops_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.shops_edit"
+                                  [(ngModel)]="levelObj.shops_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_shops_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.shops_delete"
+                                  [(ngModel)]="levelObj.shops_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_shops_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.shops_view"
+                                  [(ngModel)]="levelObj.shops_view"
+                                  type="checkbox"
+                                  (change)="changeEditAction($event, 'shops')"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <!-- //الفرص -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الفرص</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.chances_add"
+                                  [(ngModel)]="levelObj.chances_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.chances_edit"
+                                  [(ngModel)]="levelObj.chances_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_chances_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.chances_delete"
+                                  [(ngModel)]="levelObj.chances_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_chances_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.chances_view"
+                                  [(ngModel)]="levelObj.chances_view"
+                                  type="checkbox"
+                                  (change)="changeEditAction($event, 'chances')"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- //الشركاء -->
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الشركاء</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.partners_add"
+                                  [(ngModel)]="levelObj.partners_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.partners_edit"
+                                  [(ngModel)]="levelObj.partners_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_partners_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.partners_delete"
+                                  [(ngModel)]="levelObj.partners_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_partners_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.partners_view"
+                                  [(ngModel)]="levelObj.partners_view"
+                                  type="checkbox"
+                                  (change)="
+                                    changeEditAction($event, 'partners')
+                                  "
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+											<li>
+												<label class="col-form-label">الأقسام</label>
+												<ul>
+
+													<li>
+														<label class="col-md-2 col-form-label">إضافة</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.categories_add" [(ngModel)]="levelObj.categories_add" type="checkbox">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">تعديل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.categories_edit" [(ngModel)]="levelObj.categories_edit" type="checkbox"
+																 [disabled]="disable_categories_edit">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">حذف</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.categories_delete" [(ngModel)]="levelObj.categories_delete"
+																 type="checkbox" [disabled]="disable_categories_delete">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">عرض</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.categories_view" [(ngModel)]="levelObj.categories_view" type="checkbox"
+																 (change)="changeEditAction($event, 'categories')">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+												</ul>
+											</li>
+
+										</ul> -->
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+											<li>
+												<label class="col-form-label">السيارات</label>
+												<ul>
+
+													<li>
+														<label class="col-md-2 col-form-label">إضافة</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.cars_add" [(ngModel)]="levelObj.cars_add" type="checkbox">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">تعديل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.cars_edit" [(ngModel)]="levelObj.cars_edit" type="checkbox"
+																 [disabled]="disable_cars_edit">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">حذف</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.cars_delete" [(ngModel)]="levelObj.cars_delete" type="checkbox"
+																 [disabled]="disable_cars_delete">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">عرض</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.cars_view" [(ngModel)]="levelObj.cars_view" type="checkbox"
+																 (change)="changeEditAction($event, 'cars')">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+												</ul>
+											</li>
+
+										</ul> -->
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+                                            <li>
+                                                <label class="col-form-label">المدن والاحياء</label>
+                                                <ul>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">تعديل</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.places_edit"
+																	[(ngModel)]="levelObj.places_edit" type="checkbox"
+																	[disabled]="disable_places_edit">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">حذف</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.places_delete"
+																	[(ngModel)]="levelObj.places_delete" type="checkbox"
+																	[disabled]="disable_places_delete">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">عرض</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.places_view"
+																	[(ngModel)]="levelObj.places_view" type="checkbox"
+																	(change)="changeEditAction($event, 'places')">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                </ul>
+                                            </li>
+
+                                        </ul> -->
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+                                            <li>
+                                                <label class="col-form-label">المندوبين</label>
+                                                <ul>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">إضافة</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.representative_add"
+																	[(ngModel)]="levelObj.representative_add" type="checkbox">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">إسناد له طلب</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.assign_order_driver"
+																	[(ngModel)]="levelObj.assign_order_driver" type="checkbox">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">تعديل</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.representative_edit"
+																	[(ngModel)]="levelObj.representative_edit" type="checkbox"
+																	[disabled]="disable_representative_edit">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">حذف</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.representative_delete"
+																	[(ngModel)]="levelObj.representative_delete" type="checkbox"
+																	[disabled]="disable_representative_delete">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">عرض</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.representative_view"
+																	[(ngModel)]="levelObj.representative_view" type="checkbox"
+																	(change)="changeEditAction($event, 'representative')">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                </ul>
+                                            </li>
+
+                                        </ul> -->
+
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+											<li>
+												<label class="col-form-label">أكواد الخصم</label>
+												<ul>
+
+													<li>
+														<label class="col-md-2 col-form-label">إضافة</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.discount_code_add" [(ngModel)]="levelObj.discount_code_add" type="checkbox">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">تعديل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.discount_code_edit" [(ngModel)]="levelObj.discount_code_edit" type="checkbox"
+																 [disabled]="disable_discount_code_edit">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">حذف</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.discount_code_delete" [(ngModel)]="levelObj.discount_code_delete" type="checkbox"
+																 [disabled]="disable_discount_code_delete">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">عرض</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.discount_code_view" [(ngModel)]="levelObj.discount_code_view" type="checkbox"
+																 (change)="changeEditAction($event, 'discount_code')">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+												</ul>
+											</li>
+
+										</ul> -->
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+											<li>
+												<label class="col-form-label">المسافة  و الوقت</label>
+												<ul>
+
+													<li>
+														<label class="col-md-2 col-form-label">إضافة</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.distance_time_add" [(ngModel)]="levelObj.distance_time_add" type="checkbox">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">تعديل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.distance_time_edit" [(ngModel)]="levelObj.distance_time_edit" type="checkbox"
+																 [disabled]="disable_distance_time_edit">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">حذف</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.distance_time_delete" [(ngModel)]="levelObj.distance_time_delete" type="checkbox"
+																 [disabled]="disable_distance_time_delete">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">عرض</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.distance_time_view" [(ngModel)]="levelObj.distance_time_view" type="checkbox"
+																 (change)="changeEditAction($event, 'distance_time')">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+												</ul>
+											</li>
+
+										</ul> -->
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+                                            <li>
+                                                <label class="col-form-label">الطلبات</label>
+                                                <ul>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">عرض الكل</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.orders_view"
+																	[(ngModel)]="levelObj.orders_view" type="checkbox"
+																	(change)="changeEditAction($event, 'orders')">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">عرض التفاصيل</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.order_details_view"
+																	[(ngModel)]="levelObj.order_details_view"
+																	type="checkbox" [disabled]="disable_order_details_view">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">حذف</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.orders_delete"
+																	[(ngModel)]="levelObj.orders_delete"
+																	[disabled]="disable_orders_delete"
+																	type="checkbox">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                </ul>
+                                            </li>
+
+                                        </ul> -->
+
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+											<li>
+												<label class="col-form-label">أسباب الإلغاء</label>
+												<ul>
+
+													<li>
+														<label class="col-md-2 col-form-label">إضافة</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.reasons_add" [(ngModel)]="levelObj.reasons_add" type="checkbox">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">تعديل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.reasons_edit" [(ngModel)]="levelObj.reasons_edit" type="checkbox"
+																 [disabled]="disable_reasons_edit">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">حذف</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.reasons_delete" [(ngModel)]="levelObj.reasons_delete" type="checkbox"
+																 [disabled]="disable_reasons_delete">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">عرض</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.reasons_view" [(ngModel)]="levelObj.reasons_view" type="checkbox"
+																 (change)="changeEditAction($event, 'reasons')">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+												</ul>
+											</li>
+
+										</ul> -->
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+											<li>
+												<label class="col-form-label">طلبات اضافة سيارة</label>
+												<ul>
+
+													<li>
+														<label class="col-md-2 col-form-label">عرض الكل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.cars_add_requists_view" [(ngModel)]="levelObj.cars_add_requists_view" type="checkbox"
+																 (change)="changeEditAction($event, 'cars_add_requists')">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+													<li>
+														<label class="col-md-2 col-form-label">عرض التفاصيل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.cars_add_requists_details_view" [(ngModel)]="levelObj.cars_add_requists_details_view"
+																 type="checkbox" [disabled]="disable_cars_add_requists_details_view">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+
+													<li>
+														<label class="col-md-2 col-form-label">تعديل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.cars_add_requists_edit" [(ngModel)]="levelObj.cars_add_requists_edit" [disabled]="disable_cars_add_requists_edit"
+																 type="checkbox">
+																<span></span>
+															</label>
+														</span>
+													</li>
+													<li>
+														<label class="col-md-2 col-form-label">حذف</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.cars_add_requists_delete" [(ngModel)]="levelObj.cars_add_requists_delete" [disabled]="disable_cars_add_requists_delete"
+																 type="checkbox">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+												</ul>
+											</li>
+
+										</ul> -->
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+											<li>
+												<label class="col-form-label">الشكاوي</label>
+												<ul>
+
+													<li>
+														<label class="col-md-2 col-form-label">عرض الكل</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.complaints_view" [(ngModel)]="levelObj.complaints_view" type="checkbox"
+																 >
+																<span></span>
+															</label>
+														</span>
+													</li>
+													<li>
+														<label class="col-md-2 col-form-label">حذف</label>
+														<span class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.complaints_delete" [(ngModel)]="levelObj.complaints_delete"
+																 type="checkbox">
+																<span></span>
+															</label>
+														</span>
+													</li>
+
+												</ul>
+											</li>
+
+										</ul> -->
+                    <!-- End Main Sections -->
+
+                    <!-- Start Main Components -->
+
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الصفحات</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.pages_add"
+                                  [(ngModel)]="levelObj.pages_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.pages_edit"
+                                  [(ngModel)]="levelObj.pages_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_pages_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.pages_delete"
+                                  [(ngModel)]="levelObj.pages_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_pages_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.pages_view"
+                                  [(ngModel)]="levelObj.pages_view"
+                                  type="checkbox"
+                                  (change)="changeEditAction($event, 'pages')"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">المستويات</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.levels_add"
+                                  [(ngModel)]="levelObj.levels_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.levels_edit"
+                                  [(ngModel)]="levelObj.levels_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_levels_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.levels_delete"
+                                  [(ngModel)]="levelObj.levels_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_levels_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.levels_view"
+                                  [(ngModel)]="levelObj.levels_view"
+                                  type="checkbox"
+                                  (change)="changeEditAction($event, 'levels')"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- <ul class="col-md-12 form-group m-form__group">
+                                            <li>
+                                                <label class="col-form-label">الأعضاء</label>
+                                                <ul>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">إضافة</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.members_add"
+																	[(ngModel)]="levelObj.members_add" type="checkbox">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">عرض التفاصيل</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.members_details_view"
+																	[(ngModel)]="levelObj.members_details_view" type="checkbox"
+																	[disabled]="disable_members_details_view">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">إضافة أموال</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.members_add_mony"
+																	[(ngModel)]="levelObj.members_add_mony" type="checkbox"
+																	[disabled]="disable_members_add_mony">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">تعديل</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.members_edit"
+																	[(ngModel)]="levelObj.members_edit" type="checkbox"
+																	[disabled]="disable_members_edit">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">حذف</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.members_delete"
+																	[(ngModel)]="levelObj.members_delete" type="checkbox"
+																	[disabled]="disable_members_delete">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <label class="col-md-2 col-form-label">عرض</label>
+                                                        <span class="col-md-2 level-checkbox m-switch m-switch--outline
+															m-switch--success">
+															<label>
+																<input checked="checked" name="levelObj.members_view"
+																	[(ngModel)]="levelObj.members_view" type="checkbox"
+																	(change)="changeEditAction($event, 'members')">
+																<span></span>
+                                                        </label>
+                                                        </span>
+                                                    </li>
+
+                                                </ul>
+                                            </li>
+
+                                        </ul> -->
+
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الإدارة</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">إضافة</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.admins_add"
+                                  [(ngModel)]="levelObj.admins_add"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">تعديل</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.admins_edit"
+                                  [(ngModel)]="levelObj.admins_edit"
+                                  type="checkbox"
+                                  [disabled]="disable_admins_edit"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">حذف</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.admins_delete"
+                                  [(ngModel)]="levelObj.admins_delete"
+                                  type="checkbox"
+                                  [disabled]="disable_admins_delete"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.admins_view"
+                                  [(ngModel)]="levelObj.admins_view"
+                                  type="checkbox"
+                                  (change)="changeEditAction($event, 'admins')"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الصفحة الرئيسية</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            &nbsp;
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.main_view"
+                                  [(ngModel)]="levelObj.main_view"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <ul class="col-md-12 form-group m-form__group">
+                      <li>
+                        <label class="col-form-label">الصفحة الشخصية</label>
+                        <ul>
+                          <li>
+                            <label class="col-md-2 col-form-label">عرض</label>
+                            <span
+                              class="col-md-2 level-checkbox m-switch m-switch--outline m-switch--success"
+                            >
+                              <label>
+                                <input
+                                  checked="checked"
+                                  name="levelObj.my_profile_view"
+                                  [(ngModel)]="levelObj.my_profile_view"
+                                  type="checkbox"
+                                />
+                                <span></span>
+                              </label>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                    <!-- End Main Components -->
+                  </div>
+                </div>
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                  <div class="m-form__actions m-form__actions">
+                    <div class="row">
+                      <!-- <div class="col-lg-3"></div>										 -->
+                      <div class="col-lg-6">
+                        <button
+                          *ngIf="add_action"
+                          [disabled]="disablebtn"
+                          type="submit"
+                          class="btn btn-primary"
+                          (click)="addEditPage()"
+                        >
+                          حفظ المستوى
+                        </button>
+
+                        <button
+                          *ngIf="edit_action"
+                          [disabled]="disablebtn"
+                          type="submit"
+                          class="btn btn-primary"
+                          (click)="addEditPage()"
+                        >
+                          تعديل المستوى
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div class="m--space-30"></div>
+          </div>
+
+          <!--end::Section-->
+        </div>
+
+        <div
+          *ngIf="
+            (levels_add === false && page_id === null) ||
+            (levels_edit === false && page_id !== null)
+          "
+          class="m-portlet"
+        >
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+              <div
+                class="m-alert m-alert--icon alert alert-danger"
+                role="alert"
+              >
+                <div class="m-alert__icon">
+                  <i class="flaticon-danger"></i>
+                </div>
+                <div class="m-alert__text">
+                  <strong>
+                    {{ commService.permissionMsgType }}
+                  </strong>
+                  {{ commService.permissionMsg }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--end::Portlet-->
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #load>
+  <div class="center-content">
+    <img [src]="loadingImgPath" alt="Loading..." class="loading-img" />
+  </div>
+</ng-template>

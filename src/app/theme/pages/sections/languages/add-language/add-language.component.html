@@ -1,0 +1,213 @@
+<ng-container *ngIf="isDataAvailable === true; then ok else load"></ng-container>
+<ng-template #ok>
+
+	<!-- BEGIN: Subheader -->
+	<div class="m-subheader" appunwraptag="">
+		<div class="d-flex align-items-center">
+			<div class="mr-auto">
+				<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+					<li class="m-nav__item m-nav__item--home">
+						<a routerLink="/" class="m-nav__link m-nav__link--icon">
+							<i class="m-nav__link-icon la la-home"></i>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+					<li class="m-nav__item">
+						<a routerLink="/languages/all-languages" class="m-nav__link">
+							<span class="m-nav__link-text">
+								كافة اللغات
+							</span>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+					<li class="m-nav__item">
+						<a href="" class="m-nav__link">
+
+							<span *ngIf="add_action" class="m-nav__link-text">
+								إضافة لغة جديدة
+							</span>
+
+							<span *ngIf="edit_action" class="m-nav__link-text">
+								تعديل اللغة
+							</span>
+
+						</a>
+					</li>
+				</ul>
+			</div>
+
+
+		</div>
+	</div>
+	<!-- END: Subheader -->
+
+	<div class="m-content">
+
+		<div class="row" *ngIf="(languages_add && page_id === null) || (languages_edit && page_id !== null)">
+
+			<div class="col-xl-8">
+
+				<div class="m-portlet__body">
+
+					<div class="m-section">
+
+						<div class="m-portlet">
+							<div class="m-portlet__head">
+								<div class="m-portlet__head-caption">
+									<div class="m-portlet__head-title">
+										<span class="m-portlet__head-icon m--hide">
+											<i class="la la-gear"></i>
+										</span>
+
+										<h3 class="m-portlet__head-text" *ngIf="add_action">البيانات الأساسية</h3>
+										<h3 class="m-portlet__head-text" *ngIf="edit_action">تعديل اللغة : {{language_name_title}}</h3>
+
+									</div>
+								</div>
+							</div>
+
+							<div class="m-form" id="pageForm">
+								<div class="m-portlet__body">
+									<div class="m-form__section m-form__section--first">
+
+										<div class="form-group m-form__group">
+											<label for="name">
+												الاسم :
+											</label>
+											<input id="name" [(ngModel)]="name" type="text" class="form-control m-input" placeholder="اسم اللغة"
+											 autocomplete="off" required (keyup)="onKeyUpName($event)">
+
+											<ng-container *ngIf="success_name">
+												<span class="m-form__help" style="color: red">
+													{{ nameErrorMsg }}
+												</span>
+											</ng-container>
+
+										</div>
+
+										<div class="form-group m-form__group">
+											<label for="code">
+												الكود :
+											</label>
+											<input id="code" [(ngModel)]="code" type="text" class="form-control m-input" placeholder="كود اللغة"
+											 autocomplete="off" required (keyup)="onKeyUpCode($event)">
+
+											<ng-container *ngIf="success_code">
+												<span class="m-form__help" style="color: red">
+													{{ codeErrorMsg }}
+												</span>
+											</ng-container>
+
+										</div>
+
+
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="col-xl-4">
+
+				<div class="m-portlet">
+					<div class="m-portlet__body">
+						<div class="m-section">
+
+							<h2 class="m-section__heading">الصورة</h2>
+							<div class="m-separator m-separator--fit"></div>
+
+							<div class="m-section__content">
+								<div class="form-group m-form__group text-center">
+
+									<input type="file" name="file" [(ngModel)]="file" id="customFile" (change)="showPreviewImage($event)" accept="image/*"
+									 style="opacity: 0; position: absolute; cursor: pointer; z-index: 100; width: 50px; height: 50px;">
+
+									<img *ngIf="successImg" class="img-thumbnail img-responsive" style="position: relative; width: 50px; height: 50px;"
+									 [src]="localUrl" alt="صورة اللغة">
+
+									<a *ngIf="successRemoveImg" class="btn btn-danger m-btn btn-sm m-btn m-btn--icon m-btn--pill mt-2" href="javascript:;"
+									 ng-reflect-href="javascript:;" (click)="removeImg()">
+										<span>
+											<span>
+												حذف
+											</span>
+											&nbsp;
+											<i class="fa fa-trash-o"></i>
+
+										</span>
+									</a>
+
+									<ng-container *ngIf="success_file">
+										<span class="m-form__help" style="color: red">
+											{{ fileErrorMsg }}
+										</span>
+									</ng-container>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="m-portlet">
+					<div class="m-portlet__body">
+
+						<h5 class="m-section__heading">حفظ البيانات</h5>
+						<div class="m-separator m-separator--fit"></div>
+
+						<button *ngIf="add_action" [disabled]="disablebtn" type="button" class="btn btn-primary" (click)="addEditLanguage()">
+							حفظ اللغة
+						</button>
+
+						<button *ngIf="edit_action" [disabled]="disablebtn" type="button" class="btn btn-primary" (click)="addEditLanguage()">
+							تعديل اللغة
+						</button>
+
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div *ngIf="(languages_add === false && page_id === null) || (languages_edit === false && page_id !== null)" class="m-portlet">
+			<div class="m-portlet__body">
+				<div class="m-form__section m-form__section--first">
+
+					<div class="m-alert m-alert--icon alert alert-danger" role="alert">
+						<div class="m-alert__icon">
+							<i class="flaticon-danger"></i>
+						</div>
+						<div class="m-alert__text">
+							<strong>
+								{{ commService.permissionMsgType }}
+							</strong>
+							{{ commService.permissionMsg }}
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</ng-template>
+
+<ng-template #load>
+	<div class="center-content">
+		<img [src]="loadingImgPath" alt="Loading..." class="loading-img">
+	</div>
+</ng-template>

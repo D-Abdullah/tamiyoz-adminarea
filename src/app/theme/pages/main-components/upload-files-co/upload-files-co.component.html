@@ -1,0 +1,41 @@
+<div class="row">
+	<ng-container *ngFor="let item  of files ;let i = index ">
+
+
+		<div class="div_image col-md-12 col-sm-12 col-12">
+			<div class="progress" *ngIf="item.progress && i > 0">
+				<div class="progress-bar" [style.width]="item.progress + '%'">
+					{{item.progress}}%</div>
+			</div>
+			<p class=" btn-danger error_upload" *ngIf="item.isUpload == false &&  !item.progress  && i > 0 ">
+				<i class="fa fa-times" aria-hidden="true"></i> لم يتم الرفع
+			</p>
+
+			<p class=" btn-primary success_upload" *ngIf="item.isUpload == true &&  !item.progress  && i > 0  ">
+				<i class="fa fa-check" aria-hidden="true"></i>
+			</p>
+
+
+
+			<div class="remove_image btn-danger" *ngIf="!item.progress && i > 0 ">
+				<i class="fa fa-trash-o" (click)="removeFile(i)"></i>
+			</div>
+			<img *ngIf="  (i == 0   ) || (type == 'images' &&  i > 0 ) " class="img-thumbnail img-responsive"
+				[src]="item.localUrl" alt="Land Image">
+
+			<input *ngIf="type == 'images' &&  i == 0   " type="file" id="customFile"
+				(change)="showPreviewFile($event,i)" accept="image/*" multiple>
+			<input *ngIf="type == 'files' && i == 0   " type="file" id="customFile" (change)="showPreviewFile($event,i)"
+				accept="pdf/*" multiple>
+			<a *ngIf="type == 'files' &&  i > 0" (click)='commonService.openNav(item.localUrl)'>
+				<img class="img-thumbnail img-responsive" src="./assets/images/file.jpg" alt="Land Image">
+
+
+			</a>
+
+
+
+		</div>
+	</ng-container>
+
+</div>

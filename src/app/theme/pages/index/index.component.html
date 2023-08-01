@@ -1,0 +1,276 @@
+<div class="m-subheader" appunwraptag="">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title">
+				الإحصائيات
+			</h3>
+		</div>
+
+	</div>
+</div>
+
+<div class="m-content">
+	<div class="m-portlet">
+		<div class="m-portlet__body  m-portlet__body--no-padding">
+			<div class="row m-row--no-padding m-row--col-separator-xl" >
+
+				<div class="col-xl-4">
+					<div class="m-widget1">
+
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+										اللغات
+									</h3>
+									<span class="m-widget1__desc">
+										عدد اللغات
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-brand" style="cursor: pointer;" (click)="goToSpecificPage('languages/all-languages')">
+										{{languages_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+										الخدمات
+									</h3>
+									<span class="m-widget1__desc">
+										عدد الخدمات
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-danger" style="cursor: pointer;" (click)="goToSpecificPage('services/all-services')">
+										{{services_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+										الاخبار
+									</h3>
+									<span class="m-widget1__desc">
+										عدد الاخبار
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-success" style="cursor: pointer;" (click)="goToSpecificPage('projects/all-projects')">
+										{{projects_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+               <div class="col-xl-4">
+					<div class="m-widget1">
+
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+									المشاريع
+									</h3>
+									<span class="m-widget1__desc">
+										عدد المشاريع
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-danger" style="cursor: pointer;" (click)="goToSpecificPage('stations/all-stations')">
+										{{stations_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+										أعضاء الإدارة
+									</h3>
+									<span class="m-widget1__desc">
+										عدد أعضاء الإدارة
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-brand" style="cursor: pointer;" (click)="goToSpecificPage('management/all-admins')">
+										{{management_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+                   المحلات
+                  </h3>
+									<span class="m-widget1__desc">
+										عدد المحلات
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-danger" style="cursor: pointer;" (click)="goToSpecificPage('shops/all-shops')">
+										{{shops_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+
+
+				<div class="col-xl-4">
+					<div class="m-widget1">
+
+
+
+						<!-- <div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+										المستويات
+									</h3>
+									<span class="m-widget1__desc">
+										عدد المستويات
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-success" style="cursor: pointer;" (click)="goToSpecificPage('levels/all-levels')">
+										{{user_levels_count}}
+									</span>
+								</div>
+							</div>
+						</div> -->
+
+
+
+
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+										الشركاء
+									</h3>
+									<span class="m-widget1__desc">
+										عدد الشركاء
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-success" style="cursor: pointer;" (click)="goToSpecificPage('partners/all-partners')">
+										{{partners_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+										الصفحات
+									</h3>
+									<span class="m-widget1__desc">
+										عدد الصفحات
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-brand" style="cursor: pointer;" (click)="goToSpecificPage('pages/all-pages')">
+										{{pages_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="m-widget1__item">
+							<div class="row m-row--no-padding align-items-center">
+								<div class="col">
+									<h3 class="m-widget1__title">
+										الفرص
+									</h3>
+									<span class="m-widget1__desc">
+										عدد الفرص
+									</span>
+								</div>
+								<div class="col m--align-right">
+									<span class="m-widget1__number m--font-brand" style="cursor: pointer;" (click)="goToSpecificPage('chances/all-chances')">
+										{{chances_count}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+</div>
+<!-- <div class="m-subheader" appunwraptag="">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title">
+				المندوبين علي الخريطة
+
+			</h3>
+			<span style="margin-right: -25px;color: #888;">اخر 24 ساعة</span>
+		</div>
+
+	</div>
+</div>
+<div class="m-content">
+	<div class="m-portlet">
+		<div class="m-portlet__body  m-portlet__body--no-padding">
+			<div class="row m-row--no-padding m-row--col-separator-xl">
+
+				<div class="col-xl-12">
+
+
+				 <agm-map style="height: 600px!important;"
+				 [latitude]="lat"
+				 [longitude]="lng"
+				 [zoom]="6"
+
+			   >
+				 <agm-marker
+				   *ngFor="let marker of markers"
+				   [latitude]="marker.lat"
+				   [longitude]="marker.lng"
+				   [opacity]="marker.alpha"
+				   [title]="marker.full_name"
+				   [markerDraggable]="false"
+				   (markerClick)="selectMarker($event,marker.user_id)"
+				 >
+				 </agm-marker>
+
+			   </agm-map>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div> -->

@@ -1,0 +1,179 @@
+<ng-container *ngIf="isDataAvailable === true; then ok else load"></ng-container>
+<ng-template #ok>
+
+	<!-- BEGIN: Subheader -->
+	<div class="m-subheader" appunwraptag="">
+		<div class="d-flex align-items-center">
+			<div class="mr-auto">
+				<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+					<li class="m-nav__item m-nav__item--home">
+						<a routerLink="/" class="m-nav__link m-nav__link--icon">
+							<i class="m-nav__link-icon la la-home"></i>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+					<li class="m-nav__item">
+						<a routerLink="/correspondenceMails/all-correspondenceMails" class="m-nav__link">
+							<span class="m-nav__link-text">
+								كافة ايملات المراسله
+							</span>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+					<li class="m-nav__item">
+						<a href="" class="m-nav__link">
+
+							<span *ngIf="add_action" class="m-nav__link-text">
+								إضافة ايميل جديد
+							</span>
+
+							<span *ngIf="edit_action" class="m-nav__link-text">
+								تعديل ايميل المراسله
+							</span>
+
+						</a>
+					</li>
+				</ul>
+			</div>
+
+
+		</div>
+	</div>
+	<!-- END: Subheader -->
+
+	<div class="m-content">
+
+		<div class="row" *ngIf="(correspondence_mails_add && page_id === null) || (correspondence_mails_edit && page_id !== null)">
+
+			<div class="col-xl-12">
+
+				<div class="m-portlet__body">
+
+					<div class="m-section">
+
+						<div class="m-portlet">
+							<div class="m-portlet__head">
+								<div class="m-portlet__head-caption">
+									<div class="m-portlet__head-title">
+										<span class="m-portlet__head-icon m--hide">
+											<i class="la la-gear"></i>
+										</span>
+
+										<h3 class="m-portlet__head-text" *ngIf="add_action">البيانات الأساسية</h3>
+										<h3 class="m-portlet__head-text" *ngIf="edit_action">تعديل ايميل المراسله : {{language_name_title}}</h3>
+
+									</div>
+								</div>
+							</div>
+
+							<div class="m-form" id="pageForm">
+								<div class="m-portlet__body">
+									<div class="m-form__section m-form__section--first">
+
+										<div class="form-group m-form__group">
+											<label for="name">
+												الايميل :
+											</label>
+											<input id="name" [(ngModel)]="name" type="text" class="form-control m-input" placeholder=" ايميل المراسله"
+											 autocomplete="off" required (keyup)="onKeyUpName($event)">
+
+											<ng-container *ngIf="success_name">
+												<span class="m-form__help" style="color: red">
+													{{ nameErrorMsg }}
+												</span>
+											</ng-container>
+
+										</div>
+
+
+
+                     <div class="m-form__group form-group row">
+							<label class="col-6 col-form-label">تفعيل /تعطيل</label>
+							<div class="col-3">
+								<span class="m-switch m-switch--outline m-switch--success">
+									<label>
+										<input checked="checked" name="status" [(ngModel)]="status" type="checkbox">
+										<span></span>
+									</label>
+								</span>
+							</div>
+						</div>
+
+
+
+
+
+						<h5 class="m-section__heading">حفظ البيانات</h5>
+						<div class="m-separator m-separator--fit"></div>
+
+						<button *ngIf="add_action" [disabled]="disablebtn" type="button" class="btn btn-primary" (click)="addEditLanguage()">
+							حفظ ايميل المراسله
+						</button>
+
+						<button *ngIf="edit_action" [disabled]="disablebtn" type="button" class="btn btn-primary" (click)="addEditLanguage()">
+							تعديل ايميل المراسله
+						</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+
+
+		</div>
+
+		<div *ngIf="(correspondence_mails_add === false && page_id === null) || (correspondence_mails_edit === false && page_id !== null)" class="m-portlet">
+			<div class="m-portlet__body">
+				<div class="m-form__section m-form__section--first">
+
+					<div class="m-alert m-alert--icon alert alert-danger" role="alert">
+						<div class="m-alert__icon">
+							<i class="flaticon-danger"></i>
+						</div>
+						<div class="m-alert__text">
+							<strong>
+								{{ commService.permissionMsgType }}
+							</strong>
+							{{ commService.permissionMsg }}
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</ng-template>
+
+<ng-template #load>
+	<div class="center-content">
+		<img [src]="loadingImgPath" alt="Loading..." class="loading-img">
+	</div>
+</ng-template>

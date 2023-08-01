@@ -1,0 +1,291 @@
+<ng-container *ngIf="isDataAvailable === true; then ok else load"></ng-container>
+<ng-template #ok>
+
+	<!-- BEGIN: Subheader -->
+	<div class="m-subheader" appunwraptag="">
+		<div class="d-flex align-items-center">
+			<div class="mr-auto">
+				<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+					<li class="m-nav__item m-nav__item--home">
+						<a routerLink="/" class="m-nav__link m-nav__link--icon">
+							<i class="m-nav__link-icon la la-home"></i>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+
+					<li class="m-nav__item">
+						<a routerLink="/languages/all-languages" class="m-nav__link">
+							<span class="m-nav__link-text">
+								كافة اللغات
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="col-xl-3 m--align-right order-1 order-xl-2">
+				<a href="javascript:void(0)" (click)="goToAddLanguage()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
+					<span>
+						<span>
+							إضافة لغة جديدة
+						</span>
+						&nbsp;
+						<i class="la flaticon-plus"></i>
+
+					</span>
+				</a>
+				<div class="m-separator m-separator--dashed d-xl-none"></div>
+			</div>
+
+		</div>
+	</div>
+	<!-- END: Subheader -->
+
+	<div class="m-content">
+		<div class="row">
+			<div class="col-xl-12">
+				<!--begin::Portlet-->
+				<div *ngIf="languages_view" class="m-portlet m-portlet--tab">
+
+					<div class="m-portlet__body">
+						<!--begin::Section-->
+						<div class="m-section">
+							<div class="m-section__content">
+
+								<div class="row" [formGroup]="langForm">
+
+									<div class="col-md-10">
+
+										<input id="searchName" type="text" [(ngModel)]="searchName" formControlName="searchName" class="form-control m-input"
+										 placeholder="ابحث ب اسم اللغة ..." autocomplete="off">
+
+									</div>
+									<div class="col-md-2">
+
+										<button type="button" class="btn btn-success" (click)="goToSearch(searchName)">بحث</button>
+
+									</div>
+								</div>
+
+								<br>
+
+								<ng-container *ngIf="all_languages?.length > 0; then data else noData"></ng-container>
+
+								<ng-template #data>
+
+									<div class="table-responsive">
+										<table class="table table-bordered table-hover">
+											<thead>
+												<tr>
+													<th style="width: 60px;">
+														<label class="m-checkbox m-checkbox--success">
+															<input type="checkbox" class="check_all" (click)="commService.check_all($event)">
+															<span></span>
+														</label>
+													</th>
+
+													<th>صورة اللغة</th>
+
+													<th>
+														<span style="cursor: pointer;" (click)="getSortType('name')">
+															<span *ngIf="langStatus !== 'name'">عنوان اللغة</span>
+															<span *ngIf="langStatus === 'name'" style="color: #34BFA3">عنوان اللغة</span>
+															&nbsp;
+															<i *ngIf="langStatus !== 'name'" class="fa fa-sort"></i>
+															<ng-container *ngIf="langStatus === 'name'">
+																<i class="la la-sort-amount-asc" style="color: #34BFA3" *ngIf="this.sortDirection === 'asc'"></i>
+																<i class="la la-sort-amount-desc" style="color: #34BFA3" *ngIf="this.sortDirection === 'desc'"></i>
+															</ng-container>
+														</span>
+													</th>
+
+													<th>كود اللغة</th>
+													<th>تاريخ الإضافة</th>
+													<th>أضيف بواسطة</th>
+
+													<th style="width: 60px">تعديل</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr *ngFor="let lang of all_languages; let i = index;" [formGroup]="langForm">
+
+													<td>
+														<label class="m-checkbox m-checkbox--success">
+															<input class="checkbox_item" type="checkbox" name="items[]" (change)="commService.toggleCheckbox($event, lang.id)"
+															 value="{{lang.id}}">
+															<span></span>
+														</label>
+													</td>
+
+													<td>
+														<img [src]="langImg + lang.lang_image" class="rounded-circle" alt="صورة اللغة" width="30" height="30">
+													</td>
+													<td>{{ lang.name }}</td>
+													<td>{{ lang.code }}</td>
+													<td>{{ lang.date_added }}</td>
+													<td>{{ lang.user_full_name }}</td>
+
+													<td>
+														<a routerLink="/languages/language/{{lang.id}}" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+														 name="Edit details">
+															<i class="la la-edit"></i>
+														</a>
+
+													</td>
+
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="row">
+										<div class="col-md-4">
+											<div style="margin-top: 10px;">
+
+												<form class="m-form form-inline" id="deleteLanguageForm" [formGroup]="deleteForm" (ngSubmit)="deleteLanguageConfirm(deleteForm.value)">
+
+													<div class="form-group">
+														<select id="deleteMultiple" formControlName="deleteMultiple" [(ngModel)]="deleteMultiple" class="form-control m-input"
+														 aria-describedby="option-error" aria-invalid="false" required>
+															<option value="" [selected]="selectedOption === true">اختيار مهمة</option>
+															<option value="delete">حذف</option>
+														</select>
+													</div>
+													&nbsp; &nbsp;
+													<button type="submit" class="btn btn-success" [disabled]="!deleteForm.valid">
+														تنفيذ
+													</button>
+
+												</form>
+
+											</div>
+										</div>
+
+										<div *ngIf="count < resultObj['aItemsPerPage']" class="text-right">
+
+											<div style="margin-top: 15px;">
+												<span> إجمالى : </span>
+												<span>( {{ count }} )</span>
+											</div>
+
+										</div>
+
+										<ng-container *ngIf="count > resultObj['aItemsPerPage']">
+
+											<div class="col-md-3 text-right">
+
+												<div style="margin-top: 10px;">
+													<span>من : </span>
+													<span>( {{resultObj['from']}} )</span>
+
+													<span> الى : </span>
+													<span>( {{resultObj['to']}} )</span>
+
+													<span> إجمالى : </span>
+													<span>( {{resultObj['total']}} )</span>
+												</div>
+
+											</div>
+
+											<div class="col-md-5 text-right">
+
+												<ul class="pagination modal-3">
+
+													<li>
+														<a *ngIf="resultObj['previous'] === null" class="prev disabled">
+															<i class="la la-caret-left"></i>
+														</a>
+													</li>
+
+													<li>
+														<a *ngIf="resultObj['previous'] !== null" class="prev" [routerLink]="['/languages/all-languages']"
+														 [queryParams]="{ page: resultObj['previous'], sort: resultObj['sort'], type: resultObj['type'], searchName: resultObj['searchName'] }">
+															<i class="la la-caret-left"></i>
+														</a>
+													</li>
+
+													<ng-container *ngFor="let obj of resultObj['pages']; let i = index">
+
+														<li>
+															<a *ngIf="resultObj['current_page'] == i+1" class="active">{{obj}}</a>
+														</li>
+
+														<li>
+															<a *ngIf="resultObj['current_page'] != i+1" [class]="resultObj['current_page'] == i+1 ? 'active' : '' "
+															 [routerLink]="['/languages/all-languages']" [queryParams]="{ page: obj, sort: resultObj['sort'], type: resultObj['type'], searchName: resultObj['searchName'] }">{{obj}}</a>
+														</li>
+
+													</ng-container>
+
+													<li>
+														<a *ngIf="resultObj['next'] === null" class="next disabled">
+															<i class="la la-caret-right"></i>
+														</a>
+													</li>
+													<li>
+														<a *ngIf="resultObj['next'] !== null" class="next" [routerLink]="['/languages/all-languages']"
+														 [queryParams]="{ page: resultObj['next'], sort: resultObj['sort'], type: resultObj['type'], searchName: resultObj['searchName'] }">
+															<i class="la la-caret-right"></i>
+														</a>
+													</li>
+
+												</ul>
+
+											</div>
+
+										</ng-container>
+
+									</div>
+
+
+								</ng-template>
+
+								<ng-template #noData>
+									<div class="center-content">
+										<img [src]="loadingImgPath" alt="Loading..." class="loading-img">
+									</div>
+								</ng-template>
+
+
+							</div>
+
+						</div>
+
+						<!--end::Section-->
+					</div>
+				</div>
+
+				<div *ngIf="languages_view === false" class="m-portlet">
+					<div class="m-portlet__body">
+						<div class="m-form__section m-form__section--first">
+
+							<div class="m-alert m-alert--icon alert alert-danger" role="alert">
+								<div class="m-alert__icon">
+									<i class="flaticon-danger"></i>
+								</div>
+								<div class="m-alert__text">
+									<strong>
+										{{ commService.permissionMsgType }}
+									</strong>
+									{{ commService.permissionMsg }}
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<!--end::Portlet-->
+			</div>
+		</div>
+	</div>
+
+</ng-template>
+
+<ng-template #load>
+	<div class="center-content">
+		<img [src]="loadingImgPath" alt="Loading..." class="loading-img">
+	</div>
+</ng-template>

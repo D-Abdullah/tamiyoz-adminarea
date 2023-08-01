@@ -1,0 +1,331 @@
+<ng-container
+  *ngIf="isDataAvailable === true; then ok; else load"
+></ng-container>
+<ng-template #ok>
+  <!-- BEGIN: Subheader -->
+  <div class="m-subheader" appunwraptag="">
+    <div class="d-flex align-items-center">
+      <div class="mr-auto">
+        <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+          <li class="m-nav__item m-nav__item--home">
+            <a routerLink="/" class="m-nav__link m-nav__link--icon">
+              <i class="m-nav__link-icon la la-home"></i>
+            </a>
+          </li>
+          <li class="m-nav__separator">-</li>
+
+          <li class="m-nav__item">
+            <a routerLink="/home-section/all-sections" class="m-nav__link">
+              <span class="m-nav__link-text"> كافة العناصر </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- END: Subheader -->
+
+  <div class="m-content">
+    <div class="row">
+      <div class="col-xl-12">
+        <!--begin::Portlet-->
+        <div *ngIf="pages_view" class="m-portlet m-portlet--tab">
+          <!-- <div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+
+						<div class="m-portlet__head-name">
+							<span class="m-portlet__head-icon m--hide">
+								<i class="la la-gear"></i>
+							</span>
+							<h3 class="m-portlet__head-text">
+									كافة الصفحات
+							</h3>
+						</div>
+
+					</div>
+				</div> -->
+
+          <div class="m-portlet__body">
+            <!--begin::Section-->
+            <div class="m-section">
+              <div class="m-section__content">
+                <div class="row" [formGroup]="pageForm">
+                  <div class="col-md-10">
+                    <input
+                      id="searchTitle"
+                      type="text"
+                      [(ngModel)]="searchTitle"
+                      formControlName="searchTitle"
+                      class="form-control m-input"
+                      placeholder="ابحث ب عنوان العنصر ..."
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      (click)="goToSearch(searchTitle)"
+                    >
+                      بحث
+                    </button>
+                  </div>
+                </div>
+
+                <br />
+
+                <ng-container
+                  *ngIf="all_pages?.length > 0; then data; else noData"
+                ></ng-container>
+
+                <ng-template #data>
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>
+                            <span
+                              style="cursor: pointer"
+                              (click)="getSortType('title')"
+                            >
+                              <span *ngIf="pageStatus !== 'title'"
+                                >عنوان العنصر</span
+                              >
+                              <span
+                                *ngIf="pageStatus === 'title'"
+                                style="color: #34bfa3"
+                                >عنوان العنصر</span
+                              >
+                              &nbsp;
+                              <i
+                                *ngIf="pageStatus !== 'title'"
+                                class="fa fa-sort"
+                              ></i>
+                              <ng-container *ngIf="pageStatus === 'title'">
+                                <i
+                                  class="la la-sort-amount-asc"
+                                  style="color: #34bfa3"
+                                  *ngIf="this.sortDirection === 'asc'"
+                                ></i>
+                                <i
+                                  class="la la-sort-amount-desc"
+                                  style="color: #34bfa3"
+                                  *ngIf="this.sortDirection === 'desc'"
+                                ></i>
+                              </ng-container>
+                            </span>
+                          </th>
+
+                          <th>تاريخ الإضافة</th>
+                          <th>الحالة</th>
+                          <th>أضيف بواسطة</th>
+
+                          <th style="width: 60px">تعديل</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="let page of all_pages; let i = index"
+                          [formGroup]="pageForm"
+                        >
+                          <td>{{ page.title }}</td>
+                          <td>{{ page.date_added }}</td>
+                          <td>
+                            <span
+                              class="m-badge m-badge--danger"
+                              *ngIf="page.status === '0'"
+                              style="width: 100px; padding: 4px"
+                              >غير مفعلة</span
+                            >
+                            <span
+                              class="m-badge m-badge--success"
+                              style="width: 100px; padding: 4px"
+                              *ngIf="page.status === '1'"
+                              >مفعلة</span
+                            >
+                          </td>
+                          <td>{{ page.user_full_name }}</td>
+
+                          <td>
+                            <a
+                              routerLink="/home-section/edit-section/{{
+                                page.id
+                              }}"
+                              class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                              name="Edit details"
+                            >
+                              <i class="la la-edit"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4"></div>
+
+                    <div
+                      *ngIf="count < resultObj['aItemsPerPage']"
+                      class="text-right"
+                    >
+                      <div style="margin-top: 15px">
+                        <span> إجمالى : </span>
+                        <span>( {{ count }} )</span>
+                      </div>
+                    </div>
+
+                    <ng-container *ngIf="count > resultObj['aItemsPerPage']">
+                      <div class="col-md-3 text-right">
+                        <div style="margin-top: 10px">
+                          <span>من : </span>
+                          <span>( {{ resultObj["from"] }} )</span>
+
+                          <span> الى : </span>
+                          <span>( {{ resultObj["to"] }} )</span>
+
+                          <span> إجمالى : </span>
+                          <span>( {{ resultObj["total"] }} )</span>
+                        </div>
+                      </div>
+
+                      <div class="col-md-5 text-right">
+                        <ul class="pagination modal-3">
+                          <li>
+                            <a
+                              *ngIf="resultObj['previous'] === null"
+                              class="prev disabled"
+                            >
+                              <i class="la la-caret-left"></i>
+                            </a>
+                          </li>
+
+                          <li>
+                            <a
+                              *ngIf="resultObj['previous'] !== null"
+                              class="prev"
+                              [routerLink]="['/pages/all-pages']"
+                              [queryParams]="{
+                                page: resultObj['previous'],
+                                sort: resultObj['sort'],
+                                type: resultObj['type'],
+                                searchTitle: resultObj['searchTitle']
+                              }"
+                            >
+                              <i class="la la-caret-left"></i>
+                            </a>
+                          </li>
+
+                          <ng-container
+                            *ngFor="
+                              let obj of resultObj['pages'];
+                              let i = index
+                            "
+                          >
+                            <li>
+                              <a
+                                *ngIf="resultObj['current_page'] == i + 1"
+                                class="active"
+                                >{{ obj }}</a
+                              >
+                            </li>
+
+                            <li>
+                              <a
+                                *ngIf="resultObj['current_page'] != i + 1"
+                                [class]="
+                                  resultObj['current_page'] == i + 1
+                                    ? 'active'
+                                    : ''
+                                "
+                                [routerLink]="['/pages/all-pages']"
+                                [queryParams]="{
+                                  page: obj,
+                                  sort: resultObj['sort'],
+                                  type: resultObj['type'],
+                                  searchTitle: resultObj['searchTitle']
+                                }"
+                                >{{ obj }}</a
+                              >
+                            </li>
+                          </ng-container>
+
+                          <li>
+                            <a
+                              *ngIf="resultObj['next'] === null"
+                              class="next disabled"
+                            >
+                              <i class="la la-caret-right"></i>
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              *ngIf="resultObj['next'] !== null"
+                              class="next"
+                              [routerLink]="['/pages/all-pages']"
+                              [queryParams]="{
+                                page: resultObj['next'],
+                                sort: resultObj['sort'],
+                                type: resultObj['type'],
+                                searchTitle: resultObj['searchTitle']
+                              }"
+                            >
+                              <i class="la la-caret-right"></i>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-template>
+
+                <ng-template #noData>
+                  <div class="center-content" *ngIf="noDatadata === false">
+                    <img
+                      [src]="loadingImgPath"
+                      alt="Loading..."
+                      class="loading-img"
+                    />
+                  </div>
+                  <div class="center-content" *ngIf="noDatadata === true">
+                    <b>لا يوجد بيانات الآن ...</b>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+
+            <!--end::Section-->
+          </div>
+        </div>
+
+        <div *ngIf="pages_view === false" class="m-portlet">
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+              <div
+                class="m-alert m-alert--icon alert alert-danger"
+                role="alert"
+              >
+                <div class="m-alert__icon">
+                  <i class="flaticon-danger"></i>
+                </div>
+                <div class="m-alert__text">
+                  <strong>
+                    {{ commService.permissionMsgType }}
+                  </strong>
+                  {{ commService.permissionMsg }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--end::Portlet-->
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #load>
+  <div class="center-content">
+    <img [src]="loadingImgPath" alt="Loading..." class="loading-img" />
+  </div>
+</ng-template>

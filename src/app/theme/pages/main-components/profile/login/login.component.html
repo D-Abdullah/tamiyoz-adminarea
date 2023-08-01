@@ -1,0 +1,123 @@
+<div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--signin"
+ id="m_login" appunwraptag="">
+	<div class="m-grid__item m-grid__item--order-tablet-and-mobile-2 m-login__aside">
+		<div class="m-stack m-stack--hor m-stack--desktop">
+			<div class="m-stack__item m-stack__item--fluid">
+				<div class="m-login__wrapper">
+					<div class="m-login__logo">
+						<a href="#">
+							<img src="./assets/app/media/img//logos/logo-2.png">
+						</a>
+					</div>
+					<div class="m-login__signin">
+						<div class="m-login__head">
+							<h3 class="m-login__title">
+								قم بتسجيل الدخول الى لوحة التحكم
+							</h3>
+							<div *ngIf="invalidLogin" class="m--margin-top-40 m-alert m-alert--outline m-alert--outline-2x alert alert-danger fade show"
+							 role="alert">
+								{{ invalidLoginErrorMsg }}
+							</div>
+						</div>
+						<form class="m-login__form m-form" [formGroup]="signInForm" (ngSubmit)="signIn(signInForm.value)">
+
+							<div class="form-group m-form__group">
+								<input class="form-control m-input" type="email" placeholder="البريد الإلكترونى او رقم الهاتف " formControlName="loginEmail" [(ngModel)]="loginEmail"
+								 autocomplete="off" required>
+								<ng-container *ngIf="success">
+									<span class="m-form__help" style="color: red" *ngIf="!signInForm.controls['loginEmail'].valid && signInForm.controls['loginEmail'].touched">
+										{{ emailErrorMsg }}
+									</span>
+								</ng-container>
+							</div>
+
+							<div class="form-group m-form__group">
+								<input class="form-control m-input m-login__form-input--last" type="password" placeholder="كلمة المرور" autocomplete="off" formControlName="loginPassword"
+								 [(ngModel)]="loginPassword" required>
+								<ng-container *ngIf="success">
+									<span class="m-form__help" style="color: red" *ngIf="!signInForm.controls['loginPassword'].valid && signInForm.controls['loginPassword'].touched">
+										{{ passErrorMsg }}
+									</span>
+								</ng-container>
+							</div>
+
+							<div class="row m-login__form-sub">
+								<div class="col m--align-left">
+									<label class="m-checkbox m-checkbox--focus">
+										<input type="checkbox" name="remember"> تذكرنى
+										<span></span>
+									</label>
+								</div>
+								<div class="col m--align-right">
+									<a href="javascript:;" id="m_login_forget_password" class="m-link">
+										هل نسيت كلمة المرور ؟
+									</a>
+								</div>
+							</div>
+							<div class="m-login__form-action">
+								<button type="submit" [disabled]="!signInForm.valid" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">
+									تسجيل الدخول
+								</button>
+							</div>
+						</form>
+					</div>
+
+					<div class="m-login__forget-password">
+						<div class="m-login__head">
+							<h3 class="m-login__title">
+									هل نسيت كلمة المرور ؟
+							</h3>
+							<div class="m-login__desc">
+								ادخل بريدك الإلكترونى لإستعادة كلمة المرور
+							</div>
+						</div>
+						<form class="m-login__form m-form" [formGroup]="forgetPasswordForm" (ngSubmit)="forgetPassword(forgetPasswordForm.value)">
+
+							<ng-container *ngIf="fp_msg_status">
+
+								<div class="m-alert m-alert--outline alert alert-{{fp_msg_type}}" role="alert">
+									<span>{{ fp_msg_content }}</span>
+								</div>
+
+							</ng-container>
+
+							<div class="form-group m-form__group">
+								<input class="form-control m-input" type="text" placeholder="البريد الإلكترونى" formControlName="fp_email" [(ngModel)]="fp_email" id="fp_email"
+								 autocomplete="off">
+								<ng-container *ngIf="success">
+									<span class="m-form__help" style="color: red" *ngIf="!forgetPasswordForm.controls['fp_email'].valid && forgetPasswordForm.controls['fp_email'].touched">
+										{{ emailErrorMsg }}
+									</span>
+								</ng-container>
+							</div>
+
+							<div class="m-login__form-action">
+								<button [disabled]="!forgetPasswordForm.valid" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">
+									إستعادة كلمة المرور
+								</button>
+								<button id="m_login_forget_password_cancel" class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom">
+									إلغاء
+								</button>
+							</div>
+
+						</form>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content"
+	 style="background-image: url(./assets/app/media/img//bg/bg-4.jpg)">
+		<div class="m-grid__item m-grid__item--middle">
+			<!-- <h3 class="m-login__welcome">
+				انضم الى موقعنا الآن
+			</h3>
+			<p class="m-login__msg">
+				نقدم لكم أفضل وأحدث الخدمات
+				<br> عن طريق موقعنا المميز
+			</p> -->
+		</div>
+	</div>
+</div>

@@ -1,0 +1,244 @@
+<ng-container *ngIf="isDataAvailable === true; then ok else load"></ng-container>
+<ng-template #ok>
+
+	<!-- BEGIN: Subheader -->
+	<div class="m-subheader" appunwrapplace="">
+		<div class="d-flex align-items-center">
+			<div class="mr-auto">
+				<ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+					<li class="m-nav__item m-nav__item--home">
+						<a routerLink="/" class="m-nav__link m-nav__link--icon">
+							<i class="m-nav__link-icon la la-home"></i>
+						</a>
+					</li>
+					<li class="m-nav__separator">
+						-
+					</li>
+
+					<li class="m-nav__item">
+						<a routerLink="/my-profile" class="m-nav__link">
+							<span class="m-nav__link-text">
+								الصفحة الشخصية
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+	<!-- END: Subheader -->
+
+	<!-- <div class="m-content">
+	<div class="row">
+		<div class="col-xl-12"> -->
+	<!--begin::Portlet-->
+
+	<div *ngIf="my_profile_view">
+
+		<div class="m-grid__item m-grid__item--fluid m-wrapper">
+
+			<div class="m-content">
+				<div class="row">
+					<div class="col-xl-3 col-lg-4">
+						<div class="m-portlet m-portlet--full-height  ">
+							<div class="m-portlet__body">
+								<div class="m-card-profile">
+									<div class="m-card-profile__title m--hide">
+										صفحتك الشخصية
+									</div>
+									<div class="m-card-profile__pic">
+										<div class="m-card-profile__pic-wrapper">
+											<img [src]="img" alt="" />
+										</div>
+									</div>
+									<div class="m-card-profile__details">
+										<span class="m-card-profile__name" style="font-size: 17px;">
+											{{ full_name }}
+										</span>
+										<a href="" class="m-card-profile__email m-link">
+											{{ email }}
+										</a>
+									</div>
+								</div>
+								<!-- <ul class="m-nav m-nav--hover-bg m-portlet-fit--sides">
+								<li class="m-nav__separator m-nav__separator--fit"></li>
+								<li class="m-nav__section m--hide">
+									<span class="m-nav__section-text">
+										القسم
+									</span>
+								</li>
+
+								<li class="m-nav__item">
+									<a routerLink="/my-profile" class="m-nav__link">
+										<i class="m-nav__link-icon flaticon-profile-1"></i>
+										<span class="m-nav__link-title">
+											<span class="m-nav__link-wrap">
+												<span class="m-nav__link-text">
+													الصفحة الشخصية
+												</span>
+											</span>
+										</span>
+									</a>
+								</li>
+								<li class="m-nav__item">
+									<a routerLink="/my-profile" class="m-nav__link">
+										<i class="m-nav__link-icon flaticon-share"></i>
+										<span class="m-nav__link-text">
+											النشاط
+										</span>
+									</a>
+								</li>
+
+							</ul> -->
+								<!-- <div class="m-portlet__body-separator"></div>
+							<div class="m-widget1 m-widget1--paddingless">
+								<div class="m-widget1__item">
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												Member Profit
+											</h3>
+											<span class="m-widget1__desc">
+												Awerage Weekly Profit
+											</span>
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-brand">
+												+$17,800
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="m-widget1__item">
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												Orders
+											</h3>
+											<span class="m-widget1__desc">
+												Weekly Customer Orders
+											</span>
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-danger">
+												+1,800
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="m-widget1__item">
+									<div class="row m-row--no-padding align-items-center">
+										<div class="col">
+											<h3 class="m-widget1__title">
+												Issue Reports
+											</h3>
+											<span class="m-widget1__desc">
+												System bugs and issues
+											</span>
+										</div>
+										<div class="col m--align-right">
+											<span class="m-widget1__number m--font-success">
+												-27,49%
+											</span>
+										</div>
+									</div>
+								</div>
+							</div> -->
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-9 col-lg-8">
+						<div class="m-portlet m-portlet--full-height m-portlet--tabs  ">
+
+							<div class="m-portlet__head">
+								<div class="m-portlet__head-caption">
+									<div class="m-portlet__head-title">
+										<span class="m-portlet__head-icon m--hide">
+											<i class="la la-gear"></i>
+										</span>
+
+										<h3 class="m-portlet__head-text">البيانات الأساسية</h3>
+
+									</div>
+								</div>
+							</div>
+
+							<div class="tab-content">
+								<div class="tab-pane active" id="m_user_profile_tab_1">
+
+									<table class="table table-bordered table-hover">
+
+										<tr style="height: 70px;">
+											<th class="text-center" style="width: 180px; padding-top: 25px;">الاسم الكامل</th>
+											<td class="text-center" style="padding-top: 25px;">{{ full_name }}</td>
+										</tr>
+
+										<tr style="height: 70px;">
+											<th class="text-center" style="width: 180px; padding-top: 25px;">البريد الإلكترونى</th>
+											<td class="text-center" style="padding-top: 25px;">{{ email }}</td>
+										</tr>
+
+										<tr style="height: 70px;">
+											<th class="text-center" style="width: 180px; padding-top: 25px;">رقم الهاتف</th>
+											<td class="text-center" style="padding-top: 25px;">{{ mobile }}</td>
+										</tr>
+
+										<tr style="height: 70px;">
+											<th class="text-center" style="width: 180px; padding-top: 25px;">اسم المستوى</th>
+											<td class="text-center" style="padding-top: 25px;">{{ level_name }}</td>
+										</tr>
+
+										<tr style="height: 70px;">
+											<th class="text-center" style="width: 180px; padding-top: 25px;">ملاحظـــــــات</th>
+											<td class="text-center" style="padding-top: 25px;">{{ notes }}</td>
+										</tr>
+
+									</table>
+
+									<br>
+									<br>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div *ngIf="my_profile_view === false" class="m-portlet">
+		<div class="m-portlet__body">
+			<div class="m-form__section m-form__section--first">
+
+				<div class="m-alert m-alert--icon alert alert-danger" role="alert">
+					<div class="m-alert__icon">
+						<i class="flaticon-danger"></i>
+					</div>
+					<div class="m-alert__text">
+						<strong>
+							{{ commService.permissionMsgType}}
+						</strong>
+						{{ commService.permissionMsg}}
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!--end::Portlet-->
+	<!-- </div>
+	</div>
+</div> -->
+
+</ng-template>
+
+<ng-template #load>
+	<div class="center-content">
+		<img [src]="loadingImgPath" alt="Loading..." class="loading-img">
+	</div>
+</ng-template>

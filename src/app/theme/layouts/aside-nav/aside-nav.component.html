@@ -1,0 +1,779 @@
+<!-- BEGIN: Left Aside -->
+<button
+  class="m-aside-left-close m-aside-left-close--skin-dark"
+  id="m_aside_left_close_btn"
+  appunwraptag=""
+>
+  <i class="la la-close"></i>
+</button>
+<div
+  id="m_aside_left"
+  class="m-grid__item m-aside-left m-aside-left--skin-dark"
+>
+  <!-- BEGIN: Aside Menu -->
+  <div
+    id="m_ver_menu"
+    class="m-aside-menu m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark"
+    data-menu-vertical="true"
+    data-menu-scrollable="false"
+    data-menu-dropdown-timeout="500"
+  >
+    <ul class="m-menu__nav m-menu__nav--dropdown-submenu-arrow">
+      <li
+        class="m-menu__item"
+        routerLinkActive="m-menu__item--active"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+      >
+        <a routerLink="/index" class="m-menu__link">
+          <i class="m-menu__link-icon flaticon-line-graph"></i>
+          <span class="m-menu__link-title">
+            <span class="m-menu__link-wrap">
+              <span class="m-menu__link-text"> الرئيسية </span>
+            </span>
+          </span>
+        </a>
+      </li>
+
+      <li
+        class="m-menu__item"
+        routerLinkActive="m-menu__item--active"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+      >
+        <a routerLink="/settings" class="m-menu__link">
+          <i class="m-menu__link-icon flaticon-settings-1"></i>
+          <span class="m-menu__link-title">
+            <span class="m-menu__link-wrap">
+              <span class="m-menu__link-text"> الإعدادات </span>
+            </span>
+          </span>
+        </a>
+      </li>
+
+      <li class="m-menu__section">
+        <h4 class="m-menu__section-text">أقسام الموقع</h4>
+        <i class="m-menu__section-icon flaticon-more-v3"></i>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon fa fa-sliders"></i>
+          <span class="m-menu__link-text"> السلايد </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/sliders/all-sliders" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة السلايد </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/sliders/slider" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة اسلايد جديد </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon fa fa-home"></i>
+          <span class="m-menu__link-text"> عناصر الصفحه الرئيسيه </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/home-section/all-sections" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة العناصر </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon flaction flaticon-layers"></i>
+          <span class="m-menu__link-text"> الخدمات </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/services/all-services" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة الخدمات </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/services/service" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة خدمه جديده </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <!-- <i class="fas fa-tasks"></i> -->
+          <i class="m-menu__link-icon fa fa-tasks"></i>
+          <span class="m-menu__link-text"> الاخبار </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/projects/all-projects" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة الاخبار </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/projects/project" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة خبر جديد </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <!-- <i class="fas fa-tasks"></i> -->
+          <i class="m-menu__link-icon fa fa-map"></i>
+          <!-- <i class="fas "></i> -->
+          <!-- <i class="fas fa-map-marker-smile"></i> -->
+          <span class="m-menu__link-text"> المشاريع </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/stations/all-stations" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة المشاريع </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/stations/station" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة مشروع جديد </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/shops/all-shops" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافه المحلات </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/shops/shop" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة محل جديده </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/rentes/all-rentes" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافه طلبات الحجز </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon fa fa-gift"></i>
+          <span class="m-menu__link-text"> الفرص </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/chances/all-chances" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة الفرص </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/chances/chance" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة فرصه جديدة </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <!-- <i class="fas fa-tasks"></i> -->
+          <!-- <i class="m-menu__link-icon fa fa-tasks"></i> -->
+          <i class="m-menu__link-icon fa fa-bullhorn"></i>
+          <span class="m-menu__link-text"> التسويق </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/marketing/all-companies" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة الشركات </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/marketing/company" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة شركه جديد </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon fa fa-handshake-o"></i>
+          <span class="m-menu__link-text"> الشركاء </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/partners/all-partners" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة الشركاء </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/partners/partner" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة شريك جديد </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon fa fa-envelope"></i>
+          <span class="m-menu__link-text"> ايميلات المراسله </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a
+                routerLink="/correspondenceMails/all-correspondenceMails"
+                class="m-menu__link"
+              >
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة ايميلات المراسله </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a
+                routerLink="/correspondenceMails/add-correspondenceMail"
+                class="m-menu__link"
+              >
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة ايميل جديد </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon flaticon-folder"></i>
+          <span class="m-menu__link-text"> الصفحات </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <!-- Start My Own Menu -->
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/pages/all-pages" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة الصفحات </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/pages/page" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة صفحة جديدة </span>
+              </a>
+            </li>
+
+            <!-- End My Own Menu -->
+          </ul>
+        </div>
+      </li>
+      <!--
+			<li class="m-menu__item m-menu__item--submenu" routerLinkActive="m-menu__item--open" routerLinkActiveOptions="{ exact: true }"
+			aria-haspopup="true" data-menu-submenu-toggle="hover">
+			   <a href="#" class="m-menu__link m-menu__toggle">
+				   <i class="m-menu__link-icon flaction flaticon-layers"></i>
+				   <span class="m-menu__link-text">
+					  أقسام الدورات
+				   </span>
+				   <i class="m-menu__ver-arrow la la-angle-left"></i>
+			   </a>
+			   <div class="m-menu__submenu">
+				   <span class="m-menu__arrow"></span>
+				   <ul class="m-menu__subnav">
+
+					   <li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }"
+						aria-haspopup="true">
+						   <a routerLink="/categories_training/all-categories_training" class="m-menu__link">
+							   <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+								   <span></span>
+							   </i>
+							   <span class="m-menu__link-text">
+								   كافة الأقسام
+							   </span>
+						   </a>
+					   </li>
+
+					   <li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }"
+						aria-haspopup="true">
+						   <a routerLink="/categories_training/category_training" class="m-menu__link">
+							   <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+								   <span></span>
+							   </i>
+							   <span class="m-menu__link-text">
+								   إضافة قسم جديد
+							   </span>
+						   </a>
+					   </li>
+
+				   </ul>
+			   </div>
+		   </li>  -->
+      <!--
+			 <li class="m-menu__item m-menu__item--submenu" routerLinkActive="m-menu__item--open" routerLinkActiveOptions="{ exact: true }"
+			 aria-haspopup="true" data-menu-submenu-toggle="hover">
+				<a href="#" class="m-menu__link m-menu__toggle">
+					<i class="m-menu__link-icon flaticon-file-1"></i>
+					<span class="m-menu__link-text">
+						الدورات التدريبية
+					</span>
+					<i class="m-menu__ver-arrow la la-angle-left"></i>
+				</a>
+				<div class="m-menu__submenu">
+					<span class="m-menu__arrow"></span>
+					<ul class="m-menu__subnav">
+
+						<li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }"
+						 aria-haspopup="true">
+							<a routerLink="/training_courses/all-training_courses" class="m-menu__link">
+								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+								<span class="m-menu__link-text">
+									كافة الدورات
+								</span>
+							</a>
+						</li>
+
+						<li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }"
+						 aria-haspopup="true">
+							<a routerLink="/training_courses/training_courses" class="m-menu__link">
+								<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+								<span class="m-menu__link-text">
+									إضافة دورة جديدة
+								</span>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+			</li>  -->
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon fa fa-language"></i>
+          <span class="m-menu__link-text"> اللغات </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/languages/all-languages" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة اللغات </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/languages/language" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> إضافة لغة جديد </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li
+        class="m-menu__item m-menu__item--submenu"
+        routerLinkActive="m-menu__item--open"
+        routerLinkActiveOptions="{ exact: true }"
+        aria-haspopup="true"
+        data-menu-submenu-toggle="hover"
+      >
+        <a href="#" class="m-menu__link m-menu__toggle">
+          <i class="m-menu__link-icon flaticon-network"></i>
+          <span class="m-menu__link-text"> الإدارة </span>
+          <i class="m-menu__ver-arrow la la-angle-left"></i>
+        </a>
+        <div class="m-menu__submenu">
+          <span class="m-menu__arrow"></span>
+          <ul class="m-menu__subnav">
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/levels/all-levels" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> كافة المستويات </span>
+              </a>
+            </li>
+
+            <li
+              class="m-menu__item"
+              routerLinkActive="m-menu__item--active"
+              routerLinkActiveOptions="{ exact: true }"
+              aria-haspopup="true"
+            >
+              <a routerLink="/management/all-admins" class="m-menu__link">
+                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                  <span></span>
+                </i>
+                <span class="m-menu__link-text"> الإدارة </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- <li class="m-menu__item m-menu__item--submenu" routerLinkActive="m-menu__item--open" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true" data-menu-submenu-toggle="hover">
+                <a href="#" class="m-menu__link m-menu__toggle">
+                    <i class="m-menu__link-icon flaticon-users"></i>
+                    <span class="m-menu__link-text">
+						الأعضاء
+					</span>
+                    <i class="m-menu__ver-arrow la la-angle-left"></i>
+                </a>
+                <div class="m-menu__submenu">
+                    <span class="m-menu__arrow"></span>
+                    <ul class="m-menu__subnav">
+
+                        <li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+                            <a routerLink="/members/all-members" class="m-menu__link">
+                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+                                <span class="m-menu__link-text">
+									كافة الأعضاء
+								</span>
+                            </a>
+                        </li>
+
+                        <li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+                            <a routerLink="/members/member" class="m-menu__link">
+                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+									<span></span>
+								</i>
+                                <span class="m-menu__link-text">
+									إضافة عضو جديد
+								</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </li> -->
+    </ul>
+  </div>
+  <!-- END: Aside Menu -->
+</div>
+<!-- END: Left Aside -->
